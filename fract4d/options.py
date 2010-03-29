@@ -5,7 +5,7 @@ import string
 import fractal
 
 # version of Gnofract 4D
-version = '3.13'
+version = '4.0'
 
 class OptionError(Exception):
     pass
