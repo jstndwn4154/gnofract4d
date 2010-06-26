@@ -1,13 +1,18 @@
 #include <python.h>
 
+#define WIN32_LEAN_AND_MEAN 1
 #include <windows.h>
+#include <winsock2.h>
+//#include <
 #include <io.h>
 #include <process.h>
 #include <conio.h>
+#include <pthread.h>
 
 #include <glib.h>
 #pragma comment(lib, "glib-2.0.lib")
 #pragma comment(lib, "user32.lib")
+#pragma warning(disable:4996)
 
 #if PY_VERSION_HEX < 0x03000000
 #define _PyLong_FromLong PyInt_FromLong
@@ -17,17 +22,114 @@
 
 #define BUFFER_SIZE 4096
 
+#ifdef _fstat
+#define stat_fn _fstat
+#define stat_st struct _stat
+#else
+#define stat_fs fstat
+#define stat_st stat_
+#endif
+
+int StartResult = -1;
+
+void *ConnectThread(void *socket)
+{
+	sockaddr_in service;
+	SOCKET write_socket = *((SOCKET *)socket);
+	// The following 3 lines could proabbly be stuffed and summed up by a static structure that is pre-initialised..
+	service.sin_family = AF_INET;
+	service.sin_addr.s_addr = inet_addr("127.0.0.1"); // Always use the loopback interface..
+	service.sin_port = htons(1900); // Use a nice'n'high number so as to stay out the way..
+	_sleep(10); // sleep 10ms so accept() can get started..
+	if (connect(write_socket, (sockaddr*)&service,  sizeof(service)) == SOCKET_ERROR)
+		return (void *)-1;
+	else
+		return 0;
+}
+
 extern PyObject *PyPipe(PyObject *self, PyObject *)
 {
-	HANDLE read, write;
+	WSADATA wsaData;
+	SOCKET read_socket, write_socket, AcceptSocket;
+	pthread_attr_t ThreadAttr;
+	pthread_t ThreadCon;
+	sockaddr_in service;
+	int Result;
+
+	/*HANDLE read, write;
 	int fds[2];
-	BOOL res;
-	Py_BEGIN_ALLOW_THREADS
-	res = CreatePipe(&read, &write, NULL, 0);
+	BOOL res;*/
+	//Py_BEGIN_ALLOW_THREADS
+	if ((StartResult = WSAStartup(MAKEWORD(2, 2), &wsaData)) != 0)
+	{
+		//Py_END_ALLOW_THREADS
+		PyErr_SetFromWindowsErr(StartResult);
+		return Py_BuildValue("(ii)", 0, 0);
+	}
+	read_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	if (read_socket == INVALID_SOCKET)
+	{
+		WSACleanup();
+		//Py_END_ALLOW_THREADS
+		PyErr_SetString(PyExc_IOError, "Could not get a socket");
+		return Py_BuildValue("(ii)", 0, 0);
+	}
+	else
+	{
+		bool opt = true;
+		setsockopt(read_socket, SOL_SOCKET, SO_KEEPALIVE, (char *)&opt, sizeof(opt));
+	}
+	// The following 3 lines could proabbly be stuffed and summed up by a static structure that is pre-initialised..
+	service.sin_family = AF_INET;
+	service.sin_addr.s_addr = inet_addr("127.0.0.1"); // Always use the loopback interface..
+	service.sin_port = htons(1900); // Use a nice'n'high number so as to stay out the way..
+	if (bind(read_socket, (sockaddr *)&service, sizeof(service)) == SOCKET_ERROR)
+	{
+		closesocket(read_socket);
+		WSACleanup();
+		//Py_END_ALLOW_THREADS
+		PyErr_SetString(PyExc_IOError, "Could not bind the read socket");
+		return Py_BuildValue("(ii)", 0, 0);
+	}
+	if (listen(read_socket, 1) == SOCKET_ERROR)
+	{
+		closesocket(read_socket);
+		WSACleanup();
+		//Py_END_ALLOW_THREADS
+		PyErr_SetString(PyExc_IOError, "Could not listen on the read socket");
+		return Py_BuildValue("(ii)", 0, 0);
+	}
+	write_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	if (write_socket == INVALID_SOCKET)
+	{
+		WSACleanup();
+		//Py_END_ALLOW_THREADS
+		PyErr_SetString(PyExc_IOError, "Could not get a socket");
+		return Py_BuildValue("(ii)", 0, 0);
+	}
+	else
+	{
+		bool opt = true;
+		setsockopt(write_socket, SOL_SOCKET, SO_KEEPALIVE, (char *)&opt, sizeof(opt));
+	}
+	pthread_attr_init(&ThreadAttr);
+	pthread_attr_setdetachstate(&ThreadAttr, PTHREAD_CREATE_JOINABLE);
+	pthread_attr_setscope(&ThreadAttr, PTHREAD_SCOPE_PROCESS);
+	pthread_create(&ThreadCon, &ThreadAttr, ConnectThread, &write_socket);
+	pthread_attr_destroy(&ThreadAttr);
+	AcceptSocket = accept(read_socket, NULL, NULL); // This is the socket that actually gets used for IO..
+	pthread_join(ThreadCon, (void **)&Result);
+	closesocket(read_socket); // nolonger needed.. replaced by AcceptSocket
+	// The following two calls ensure only one-way transfer of data on these sockets.
+	shutdown(AcceptSocket, SD_SEND);
+	shutdown(write_socket, SD_RECEIVE);
+
+	/*res = CreatePipe(&read, &write, NULL, 0);
 	fds[0] = _open_osfhandle((intptr_t)read, 0);
-	fds[1] = _open_osfhandle((intptr_t)write, 1);
-	Py_END_ALLOW_THREADS
-	return Py_BuildValue("(ii)", fds[0], fds[1]);
+	fds[1] = _open_osfhandle((intptr_t)write, 1);*/
+	//Py_END_ALLOW_THREADS
+	return Py_BuildValue("(ii)", AcceptSocket, write_socket); // The two sockets specified here are already endpoint connected to each-other, ready for IO.
+	//return Py_BuildValue("(ii)", fds[0], fds[1]);
 }
 
 typedef struct stat stat_;
@@ -73,7 +175,7 @@ typedef struct _GIOWin32Watch
 
 void io_init(GIOWin32Channel *channel)
 {
-	InitializeCriticalSection (&channel->mutex);
+	InitializeCriticalSection(&channel->mutex);
 	channel->running = FALSE;
 	channel->needs_close = FALSE;
 	channel->thread_id = 0;
@@ -97,6 +199,10 @@ void io_free(GIOChannel *channel)
 	g_free(WinChan->buffer);
 	if (WinChan->space_avail_event != NULL)
 		CloseHandle(WinChan->space_avail_event);
+	if (WinChan->type == G_IO_WIN32_SOCKET && WinChan->fd != -1)
+		WSAEventSelect(WinChan->fd, NULL, 0);
+	if (WinChan->event != FALSE)
+		WSACloseEvent(WinChan->event);
 	g_free(channel);
 }
 
@@ -393,6 +499,24 @@ static BOOL io_prepare(GSource *source, int *timeout)
 			LeaveCriticalSection(&channel->mutex);
 			break;
 		}
+		case G_IO_WIN32_SOCKET:
+		{
+			int event_mask = 0;
+			if ((watch->condition & G_IO_IN) != FALSE)
+				event_mask |= (FD_READ | FD_ACCEPT);
+			if ((watch->condition & G_IO_OUT) != FALSE)
+				event_mask |= (FD_WRITE | FD_CONNECT);
+			event_mask |= FD_CLOSE;
+			if (channel->event_mask != event_mask)
+			{
+				WSAEventSelect(channel->fd, (HANDLE)watch->pollfd.fd, event_mask);
+				channel->event_mask = event_mask;
+				channel->last_events = 0;
+				if (((event_mask & FD_WRITE) != FALSE) && channel->ever_writable != FALSE && channel->write_would_have_blocked == FALSE)
+					WSASetEvent((WSAEVENT)watch->pollfd.fd);
+			}
+			break;
+		}
 		default:
 		{
 			g_assert_not_reached();
@@ -408,6 +532,7 @@ static BOOL io_check(GSource *source)
 	GIOWin32Watch *watch = (GIOWin32Watch *)source;
 	GIOWin32Channel *channel = (GIOWin32Channel *)watch->channel;
 	GIOCondition condition = g_io_channel_get_buffer_condition(watch->channel);
+
 	switch (channel->type)
 	{
 		case G_IO_WIN32_WINDOWS_MESSAGES:
@@ -433,6 +558,44 @@ static BOOL io_check(GSource *source)
 				}
 			}
 			return FALSE;
+		}
+		case G_IO_WIN32_SOCKET:
+		{
+			WSANETWORKEVENTS events;
+			if ((channel->last_events & FD_WRITE) == FALSE)
+			{
+				WSAEnumNetworkEvents(channel->fd, 0, &events);
+				if (watch->pollfd.revents != 0 && events.lNetworkEvents == 0 && (channel->event_mask & FD_WRITE) == FALSE)
+				{
+					channel->event_mask = 0;
+					WSAEventSelect(channel->fd, (HANDLE)watch->pollfd.fd, 0);
+					ResetEvent((HANDLE) watch->pollfd.fd);
+				}
+				else if ((events.lNetworkEvents & FD_WRITE) != FALSE)
+					channel->ever_writable = TRUE;
+				channel->last_events = events.lNetworkEvents;
+			}
+			watch->pollfd.revents = 0;
+			if ((channel->last_events & (FD_READ | FD_ACCEPT)) != FALSE)
+				watch->pollfd.revents |= G_IO_IN;
+			if ((channel->last_events & FD_WRITE) != FALSE)
+				watch->pollfd.revents |= G_IO_OUT;
+			else
+			{
+				if ((events.lNetworkEvents & FD_CONNECT) != FALSE)
+				{
+					if (events.iErrorCode[FD_CONNECT_BIT] == 0)
+						watch->pollfd.revents |= G_IO_OUT;
+					else
+						watch->pollfd.revents |= (G_IO_HUP | G_IO_ERR);
+				}
+				if (watch->pollfd.revents == 0 && ((channel->last_events & (FD_CLOSE))) != FALSE)
+					watch->pollfd.revents |= G_IO_HUP;
+			}
+			if ((watch->pollfd.revents & G_IO_HUP) == FALSE && channel->ever_writable != FALSE &&
+				channel->write_would_have_blocked == FALSE && (channel->event_mask & FD_WRITE) != FALSE)
+				watch->pollfd.revents |= G_IO_OUT;
+			return ((watch->pollfd.revents | condition) & watch->condition);
 		}
 		default:
 		{
@@ -468,6 +631,7 @@ static void io_finalize(GSource *source)
 		case G_IO_WIN32_WINDOWS_MESSAGES:
 		case G_IO_WIN32_CONSOLE:
 		case G_IO_WIN32_FILE_DESC:
+		case G_IO_WIN32_SOCKET:
 			break;
 		default:
 		{
@@ -614,7 +778,127 @@ static GSource *io_console_create_watch(GIOChannel *channel, GIOCondition condit
 	return source;
 }
 
-static GIOFlags get_fd_flags(GIOChannel *Channel, stat_ *s)
+static GIOStatus io_sock_read(GIOChannel *channel, char *buf, gsize count, gsize *bytes_read, GError **err)
+{
+	GIOWin32Channel *WinChan = (GIOWin32Channel *)channel;
+	int result, winsock_error;
+	GIOChannelError error;
+
+	result = recv(WinChan->fd, buf, count, 0);
+	if (result == SOCKET_ERROR)
+	{
+		char *emsg;
+		winsock_error = WSAGetLastError();
+		emsg = g_win32_error_message(winsock_error);
+		*bytes_read = 0;
+		switch (winsock_error)
+		{
+			case WSAEINVAL:
+			{
+				error = G_IO_CHANNEL_ERROR_INVAL;
+				break;
+			}
+			case WSAEWOULDBLOCK:
+			{
+				g_free(emsg);
+				return G_IO_STATUS_AGAIN;
+			}
+			default:
+			{
+				error = G_IO_CHANNEL_ERROR_FAILED;
+				break;
+			}
+		}
+		g_set_error_literal(err, G_IO_CHANNEL_ERROR, error, emsg);
+		g_free(emsg);
+		return G_IO_STATUS_ERROR;
+	}
+	else
+	{
+		*bytes_read = result;
+		if (result == 0)
+			return G_IO_STATUS_EOF;
+		return G_IO_STATUS_NORMAL;
+	}
+}
+
+static GIOStatus io_sock_write(GIOChannel *channel, const char *buf, gsize count, gsize *bytes_written, GError **err)
+{
+	GIOWin32Channel *WinChan = (GIOWin32Channel *)channel;
+	int result, winsock_error;
+	GIOChannelError error;
+
+	result = send(WinChan->fd, buf, count, 0);
+	if (result == SOCKET_ERROR)
+	{
+		char *emsg;
+		winsock_error = WSAGetLastError();
+		emsg = g_win32_error_message(winsock_error);
+		*bytes_written = 0;
+		switch (winsock_error)
+		{
+			case WSAEINVAL:
+			{
+				error = G_IO_CHANNEL_ERROR_INVAL;
+				break;
+			}
+			case WSAEWOULDBLOCK:
+			{
+				WinChan->write_would_have_blocked = TRUE;
+				WinChan->last_events = 0;
+				g_free(emsg);
+				return G_IO_STATUS_AGAIN;
+			}
+			default:
+			{
+				error = G_IO_CHANNEL_ERROR_FAILED;
+				break;
+			}
+		}
+		g_set_error_literal(err, G_IO_CHANNEL_ERROR, error, emsg);
+		g_free(emsg);
+		return G_IO_STATUS_ERROR;
+	}
+	else
+	{
+		*bytes_written = result;
+		WinChan->write_would_have_blocked = FALSE;
+		return G_IO_STATUS_NORMAL;
+	}
+}
+
+static GIOStatus io_sock_close(GIOChannel *channel, GError **err)
+{
+	GIOWin32Channel *WinChan = (GIOWin32Channel *)channel;
+	if (WinChan->fd != -1)
+	{
+		closesocket(WinChan->fd);
+		WinChan->fd = -1;
+	}
+	fprintf(stdout, "fract4dc|win32func.cpp:Error, io_sock_close called!\n");
+	return G_IO_STATUS_NORMAL;
+}
+
+static GSource *io_sock_create_watch(GIOChannel *channel, GIOCondition condition)
+{
+	GIOWin32Channel *WinChan = (GIOWin32Channel *)channel;
+	GSource *source = g_source_new(&io_watch_funcs, sizeof(GIOWin32Watch));
+	GIOWin32Watch *watch = (GIOWin32Watch *)source;
+
+	watch->channel = channel;
+	g_io_channel_ref(channel);
+	watch->condition = condition;
+
+	if (WinChan->event == WSA_INVALID_EVENT)
+		WinChan->event = WSACreateEvent();
+
+	watch->pollfd.fd = (gintptr)WinChan->event;
+	watch->pollfd.events = condition;
+	g_source_add_poll(source, &watch->pollfd);
+	return source;
+}
+
+static GIOFlags get_fd_flags(GIOChannel *Channel, stat_st *s)
 {
 	HANDLE h = (HANDLE)_get_osfhandle(((GIOWin32Channel *)Channel)->fd);
 	char c;
@@ -651,9 +935,43 @@ static GIOFlags get_console_flags(GIOChannel *Channel)
 
 static GIOFlags get_fd_flags_(GIOChannel *Channel)
 {
-	stat_ s;
-	fstat(((GIOWin32Channel *)Channel)->fd, &s);
+	stat_st s;
+	stat_fn(((GIOWin32Channel *)Channel)->fd, &s);
 	return get_fd_flags(Channel, &s);
+}
+
+static GIOStatus set_sock_flags(GIOChannel *Channel, GIOFlags flags, GError **err)
+{
+	GIOWin32Channel *WinChan = (GIOWin32Channel *)Channel;
+	unsigned long arg;
+	if ((flags & G_IO_FLAG_NONBLOCK) != FALSE)
+	{
+		arg = 1;
+		if (ioctlsocket(WinChan->fd, FIONBIO, &arg) == SOCKET_ERROR)
+		{
+			char *emsg = g_win32_error_message(WSAGetLastError());
+			g_set_error_literal(err, G_IO_CHANNEL_ERROR, G_IO_CHANNEL_ERROR_FAILED, emsg);
+			g_free(emsg);
+			return G_IO_STATUS_ERROR;
+		}
+	}
+	else
+	{
+		arg = 0;
+		if (ioctlsocket(WinChan->fd, FIONBIO, &arg) == SOCKET_ERROR)
+		{
+			char *emsg = g_win32_error_message(WSAGetLastError());
+			g_set_error_literal(err, G_IO_CHANNEL_ERROR, G_IO_CHANNEL_ERROR_FAILED, emsg);
+			g_free(emsg);
+			return G_IO_STATUS_ERROR;
+		}
+	}
+	return G_IO_STATUS_NORMAL;
+}
+
+static GIOFlags get_sock_flags(GIOChannel *Channel)
+{
+	return (GIOFlags)0;
 }
 
 GIOFuncs win32_channel_fd_funcs =
@@ -680,13 +998,25 @@ GIOFuncs win32_channel_console_funcs =
 	get_console_flags,
 };
 
-GIOChannel *new_io_channel(int fd)
+GIOFuncs win32_channel_sock_funcs =
 {
-	GIOWin32Channel *Channel = g_new (GIOWin32Channel, 1);
-	GIOChannel *ret = (GIOChannel *)Channel;
-	stat_ s;
+	io_sock_read,
+	io_sock_write,
+	NULL,
+	io_sock_close,
+	io_sock_create_watch,
+	io_free,
+	set_sock_flags,
+	get_sock_flags,
+};
 
-	fstat(fd, &s);
+GIOChannel *new_io_channel_fd(int fd)
+{
+	GIOWin32Channel *Channel = g_new(GIOWin32Channel, 1);
+	GIOChannel *ret = (GIOChannel *)Channel;
+	stat_st s;
+
+	stat_fn(fd, &s);
 	g_io_channel_init(ret);
 	io_init(Channel);
 
@@ -706,6 +1036,75 @@ GIOChannel *new_io_channel(int fd)
 	}
 
 	return ret;
+}
+
+GIOChannel *new_io_channel_socket(int socket)
+{
+	GIOWin32Channel *Channel = g_new(GIOWin32Channel, 1);
+	GIOChannel *ret = (GIOChannel *)Channel;
+
+	g_io_channel_init(ret);
+	io_init(Channel);
+
+	ret->funcs = &win32_channel_sock_funcs;
+	Channel->type = G_IO_WIN32_SOCKET;
+	Channel->fd = socket;
+	Channel->event = WSA_INVALID_EVENT;
+
+	ret->is_readable = TRUE;
+	ret->is_writeable = TRUE;
+	ret->is_seekable = FALSE;
+
+	return ret;
+}
+
+#ifdef _WIN32
+typedef __w64 unsigned int UINT_PTR;
+#else
+typedef unsigned __int64 UINT_PTR;
+#endif
+
+void doNotCrash(const wchar_t *, const wchar_t *, const wchar_t *, unsigned int, UINT_PTR)
+{
+	return;
+}
+
+inline bool isFD(int fd)
+{
+	bool ret;
+	_invalid_parameter_handler old_handler;
+	// The next line turns off crashing for the line after the next comment..
+	old_handler = _set_invalid_parameter_handler(doNotCrash);
+	// Taken from the working VC++6 version of the CRT file fstat.c
+	ret = ((GetFileType((HANDLE)_get_osfhandle(fd)) & ~FILE_TYPE_REMOTE) != 0);
+	// ..and set it back again..
+	_set_invalid_parameter_handler(old_handler);
+	return ret;
+}
+
+inline bool isSocket(int socket)
+{
+	bool ret;
+	int optval;
+	static int optlen = sizeof(optval);
+	ret = (getsockopt(socket, SOL_SOCKET, SO_TYPE, (char *)&optval, &optlen) != SOCKET_ERROR);
+	return ret;
+}
+
+GIOChannel *new_io_channel(int fd)
+{
+	bool is_fd = isFD(fd), is_socket = isSocket(fd);
+
+	if (is_fd == true && is_socket == true)
+		g_warning ("new_io_channel: %d is both a file descriptor and a socket. File descriptor interpretation assumed.", fd);
+
+	if (is_fd == true)
+		return new_io_channel_fd(fd);
+	else if (is_socket == true)
+		return new_io_channel_socket(fd);
+
+	g_warning("new_io_channel: %d is neither a file descriptor or a socket.", fd);
+	return NULL;
 }
 
 UINT add_watch(GIOChannel *Channel, GIOCondition condition, GIOFunc func, void *user_data)
@@ -795,16 +1194,17 @@ extern PyObject *Py_io_add_watch(PyObject *self, PyObject *args)
 
 extern PyObject *PyRead(PyObject *self, PyObject *args)
 {
-	int fd, size, ret;
+	int fd, size, ret, err;
 	Py_ssize_t len;
 	PyObject *buffer;
+	bool is_socket;
 	len = PyTuple_Size(args);
 	if (len < 2 || len > 2)
 	{
 		PyErr_SetString(PyExc_TypeError, "read takes just 2 arguments");
 		return NULL;
 	}
-	if (PyArg_ParseTuple(args, "ii", &fd, &size) == 0)
+	if (PyArg_ParseTuple(args, "ii:read", &fd, &size) == 0)
 		return NULL;
 	if (fd < 0)
 		return NULL;
@@ -813,14 +1213,38 @@ extern PyObject *PyRead(PyObject *self, PyObject *args)
 	if (buffer == NULL)
 		return NULL;
 	Py_BEGIN_ALLOW_THREADS
-	ret = read(fd, PyString_AsString(buffer), size);
+	is_socket = isSocket(fd);
+	if (isFD(fd) == true)
+		ret = read(fd, PyString_AsString(buffer), size);
+	else if (is_socket == true)
+	{
+		// The following ensures no error caused by M$..
+		int recved = 0;
+		do
+		{
+			ret = recv(fd, PyString_AsString(buffer), size, 0);
+			if (ret == -1)
+				err = WSAGetLastError();
+			else
+				break;
+		}
+		while (err == WSAEWOULDBLOCK);
+	}
 	Py_END_ALLOW_THREADS
 	if (ret < 0)
 	{
+		int errcode = (is_socket == true ? err : errno);
+		char *err = (char *)malloc(snprintf(NULL, 0, "reading failed with code %u", errcode));
+		sprintf(err, "reading failed with code %u", errcode);
 		Py_DECREF(buffer);
+		PyErr_SetString(PyExc_IOError, err);
+		free(err);
 		return NULL;
 	}
+	else if (ret == 0)
+		PyErr_SetString(PyExc_IOError, "reading halted - socket has become closed!");
 	if (ret != size)
 		_PyString_Resize(&buffer, ret);
+
 	return buffer;
 }

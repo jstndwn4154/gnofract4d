@@ -52,11 +52,8 @@ class Hidden(gobject.GObject):
     def __init__(self,comp,width,height,total_width=-1,total_height=-1):
         gobject.GObject.__init__(self)
 
-        if 'win' in sys.platform:
-            (self.readfd, self.writefd) = fract4dc.pipe()
-        else:
-            # This is the line that was screwing Windows up.. changed to be run only on Linux, for Windows, we want to do this in fract4dc..
-            (self.readfd, self.writefd) = os.pipe()
+        self.io_subsys = gtkio()
+        (self.readfd, self.writefd) = self.io_subsys.pipe()
         self.nthreads = 1
 
         self.compiler = comp

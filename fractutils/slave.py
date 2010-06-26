@@ -3,10 +3,12 @@
 import sys
 import os
 
-if "win" not in sys.platform:
-    import fcntl
-else:
+if "win" == sys.platform[:3]:
     import win32api
+    # Work in this module is not complete, the following code does /NOT/ work on Windows.
+else:
+    import fcntl
+
 import signal
 import select
 import errno

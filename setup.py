@@ -51,21 +51,64 @@ def call_package_config(package,option,optional=False):
 
 extra_macros = []
 
-png_flags = call_package_config("libpng", "--cflags", True)
-if png_flags != []:
-    extra_macros.append(('PNG_ENABLED', 1))
-else:
-    print "NO PNG HEADERS FOUND"
-    
-png_libs = call_package_config("libpng", "--libs", True)
+if 'win' == sys.platform[:3]:
+    from win32api import GetLogicalDriveStrings
+    def scan_for_file(out, file, BaseDir = ""):
+        for drive in GetLogicalDriveStrings().split('\0'):
+            for (root, dirs, files) in os.walk(drive + BaseDir + '\\'):
+                if len(files) == 0:
+                    continue
+                if file in files:
+                    out += [ root + '\\' + file ]
+                    return out
+        print "FILE NOT FOUND"
+    cache_file = os.path.join(os.getcwd(), 'setup.cache')
+    if os.path.exists(cache_file) == False:
+        png_flags = scan_for_file([], 'png.h', 'Program Files')
+        if png_flags != []:
+            png_flags[0] = '/I' + png_flags[0] + ''
+        png_libs = scan_for_file([], 'libpng.lib', 'Program Files')
+        jpg_flags = scan_for_file([], 'jpeglib.h', 'Program Files')
+        jpg_libs = scan_for_file([], 'jpeg.lib', 'Program Files')
+        cache_file = open(cache_file, 'w')
+        cache_file.writelines(png_flags + '\n' + png_libs + '\n' + jpg_flags + '\n' + jpg_libs)
+        cache_file.close()
+    else:
+        cache_file = open(cache_file)
+        lines = cache_file.readlines()
+        png_flags = [ lines[0].strip() ]
+        png_libs = [ lines[1].strip() ]
+        jpg_flags = [ lines[2].strip() ]
+        jpg_libs = [ lines[3].strip() ]
+        cache_file.close()
+        del lines
+#        def scan_for_libjpeg_h(jpg_libs):
+#            for drive in GetLogicalDriveStrings().split('\0'):
+#                for (root, dirs, files) in os.walk(drive + 'Program Files\\'):
+#                    if len(files) == 0:
+#                        continue
+#                    if 'jpeglib.h' in files:
+#                        jpg_libs += [ root + '\\jpeglib.h' ]
+#                        return jpg_libs
+#            if jpg_libs == []:
+#                print "NO JPEG HEADERS FOUND"
 
-jpg_lib = "jpeg"
-if os.path.isfile("/usr/include/jpeglib.h"):
-    extra_macros.append(('JPG_ENABLED', 1))
-    jpg_libs = [ jpg_lib ]
 else:
-    print "NO JPEG HEADERS FOUND"
-    jpg_libs = []
+    png_flags = call_package_config("libpng", "--cflags", True)
+    if png_flags != []:
+        extra_macros.append(('PNG_ENABLED', 1))
+    else:
+        print "NO PNG HEADERS FOUND"
+        
+    png_libs = call_package_config("libpng", "--libs", True)
+
+    jpg_lib = "jpeg"
+    if os.path.isfile("/usr/include/jpeglib.h"):
+        extra_macros.append(('JPG_ENABLED', 1))
+        jpg_libs = [ jpg_lib ]
+    else:
+        print "NO JPEG HEADERS FOUND"
+        jpg_libs = []
 
 #not ready yet. 
 have_gmp = False # os.path.isfile("/usr/include/gmp.h")
@@ -136,9 +179,9 @@ module_fract4dgmp = Extension(
     undef_macros = [ 'NDEBUG']    
     )
 
-if "win" in sys.platform:
+if "win" == sys.platform[:3]:
     warnings = '/W3'
-    libs = [ 'pthreadVC2', 'libdl' ]
+    libs = [ 'pthreadVC2', 'libdl', 'ws2_32' ]
     osdep = [ '/DWIN32', '/DWINDOWS', '/D_USE_MATH_DEFINES', '/D_CRT_SECURE_NO_WARNINGS', '/EHsc', '/Ox' ]
     osdep += [ '/I"F:/Gamma/GTK+/Win32/include/glib-2.0/"', '/I"F:/Gamma/GTK+/Win32/lib/glib-2.0/include/"' ]
     extra_source = [ 'fract4d/c/win32func.cpp', 'fract4d/c/fract4d_stdlib_exports.cpp' ]
@@ -271,7 +314,7 @@ lib_targets = {
     "fract4dcgmp" + so_extension : "fract4d",
     "gmpy" + so_extension: "fract4d"
     }
-if 'win' in sys.platform:
+if 'win' == sys.platform[:3]:
     lib_targets["fract4d_stdlib.lib"] = "fract4d"
 
 def copy_libs(dummy,dirpath,namelist):
@@ -282,6 +325,6 @@ def copy_libs(dummy,dirpath,namelist):
              shutil.copy(name, target)
             
 os.path.walk("build",copy_libs,None)
-if 'win' in sys.platform:
+if 'win' == sys.platform[:3]:
     shutil.copy("fract4d/fract4d_stdlib.pyd", "fract4d_stdlib.pyd")
 

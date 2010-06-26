@@ -111,7 +111,7 @@ class MainWindow:
         
         self.statuses = [ _("Done"),
                           _("Calculating"),
-                          _("Deepening (%d iterations)"),
+                          _("Deepening ({0} iterations)"),
                           _("Antialiasing"),
                           _("Paused"),
                           _("Reducing Periodicity Tolerance")]
@@ -505,7 +505,7 @@ class MainWindow:
     def status_changed(self,f,status):
         if status == 2:
             # deepening
-            text = self.statuses[status] % self.f.maxiter
+            text = self.statuses[status].format(self.f.maxiter)
         elif status == 0:
             # done
             text = self.statuses[status] 
@@ -1447,9 +1447,9 @@ class MainWindow:
             self.compiler.clear_cache()
         finally:
             gtk.main_quit()
-            if 'win' in sys.platform:
+            if 'win' == sys.platform[:3]:
                 exit(0);
-#            return False
+            return False
 
     def apply_options(self,opts):
         "Deal with opts gathered from cmd-line"

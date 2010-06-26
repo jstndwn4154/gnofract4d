@@ -411,7 +411,7 @@ class Compiler:
         
         if cfile == None:
             cfile = self.cache.makefilename(hash,".c")
-            if 'win' in sys.platform:
+            if 'win' == sys.platform[:3]:
                 objfile = self.cache.makefilename(hash, ".obj")
 
         open(cfile,"w").write(self.c_code)
@@ -419,7 +419,7 @@ class Compiler:
         # -march=i686 for 10% speed gain
         cmd = "%s \"%s\" %s %s\"%s\"" % \
               (self.compiler_name, cfile, self.flags, self.output_flag, outputfile)
-        if 'win' in sys.platform:
+        if 'win' == sys.platform[:3]:
             cmd += " /Fo\"%s\"" % objfile
         cmd += " %s" % self.libs
         #print "cmd: %s" % cmd

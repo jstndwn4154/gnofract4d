@@ -15,7 +15,7 @@ import gtk
 import gobject
 
 try:
-	from fract4d import fract4dcgmp as fract4dc
+    from fract4d import fract4dcgmp as fract4dc
 except ImportError, err:
     from fract4d import fract4dc
 
@@ -64,7 +64,7 @@ def timeout_add(time,callable):
     except AttributeError:
         gtk.timeout_add(time,callable)
 
-if 'win' not in sys.platform:
+if 'win' != sys.platform[:3]:
     def input_add(fd,cb):
         try:
             _throwback()
@@ -73,7 +73,6 @@ if 'win' not in sys.platform:
             return gtk.input_add(fd, gtk.gdk.INPUT_READ, cb)
 else:
     def input_add(fd, cb):
-        # fd = %i; cb = %o
         return fract4dc.io_add_watch(fd, gobject.IO_IN | gobject.IO_HUP, cb)
 
 def find_in_path(exe):

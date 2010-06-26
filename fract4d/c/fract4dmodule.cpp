@@ -26,13 +26,41 @@
 #include "fractFunc.h"
 #include "image.h"
 
+#ifdef MS_WINDOWS
+#define MAX_PATH 260
+#ifndef PATH_MAX
+#define PATH_MAX MAX_PATH
+#endif
+#include <direct.h>
+#ifdef _WIN32
+extern "C" {
+typedef __w64 unsigned int UINT_PTR;
+#else
+typedef unsigned __int64 UINT_PTR;
+#endif
+#define SOCKET UINT_PTR
+__declspec(dllimport) int __stdcall send(SOCKET, const char *, int, int);
+__declspec(dllimport) int __stdcall closesocket(SOCKET);
+#ifdef _WIN32
+}
+#endif
+int __send(SOCKET s, const void * b, int l, int f)
+{
+    return send(s, (const char *)b, l, f);
+}
+#endif
 
 /* not sure why this isn't defined already */
 #ifndef PyMODINIT_FUNC 
 #define PyMODINIT_FUNC void
 #endif
 
+#ifdef MS_WINDOWS
+// Windows uses .pyd, rather than .so..
+#define CMAP_NAME "/fract4d_stdlib.pyd"
+#else
 #define CMAP_NAME "/fract4d_stdlib.so"
+#endif
 
 #ifdef USE_GMP
 #define MODULE_NAME "fract4dcgmp"
@@ -851,8 +879,7 @@ public:
 	{
 	    site = site_;
 
-	    has_pixel_changed_method = 
-		PyObject_HasAttrString(site,"pixel_changed");
+        has_pixel_changed_method = (PyObject_HasAttrString(site,"pixel_changed") != 0 ? true : false);
 
 #ifdef DEBUG_CREATION
 	    fprintf(stderr,"%p : SITE : CTOR\n",this);
@@ -1033,8 +1060,9 @@ typedef enum
     STATS,
 } msg_type_t;
     
-struct calc_args
+class calc_args
 {
+public:
     double params[N_PARAMS];
     int eaa, maxiter, nThreads;
     int auto_deepen, yflip, periodicity, dirty;
@@ -1115,9 +1143,15 @@ struct calc_args
 class FDSite :public IFractalSite
 {
 public:
-    FDSite(int fd_) : fd(fd_), tid((pthread_t)0), 
-		      interrupted(false), params(NULL) 
-	{
+#ifndef MS_WINDOWS
+    FDSite(int fd_) : fd(fd_),
+    tid((pthread_t)0),
+#else
+    FDSite(int fd_) : fd((SOCKET)fd_),
+    tid(NULL),
+#endif
+              interrupted(false), params(NULL) 
+    {
 #ifdef DEBUG_CREATION
 	    fprintf(stderr,"%p : FD : CTOR\n",this);
 #endif
@@ -1127,9 +1161,15 @@ public:
     inline void send(msg_type_t type, int size, void *buf)
 	{
 	    pthread_mutex_lock(&write_lock);
+#ifndef MS_WINDOWS
 	    if (write(fd,&type,sizeof(type))) {};
 	    if (write(fd,&size,sizeof(size))) {};
 	    if (write(fd,buf,size)) {};
+#else
+	    if (__send(fd, &type, sizeof(type), 0)) {};
+	    if (__send(fd, &size, sizeof(size), 0)) {};
+	    if (__send(fd, buf, size, 0)) {};
+#endif
 	    pthread_mutex_unlock(&write_lock);
 	}
     virtual void iters_changed(int numiters)
@@ -1219,8 +1259,12 @@ public:
 #ifdef DEBUG_THREADS
 	    fprintf(stderr,"%p : CA : SET(%p)\n", this,tid_);
 #endif
+#ifndef MS_WINDOWS
 	    tid = tid_;
-	}
+#else
+	    tid = &tid_;
+#endif
+    }
 
     virtual void wait()
 	{
@@ -1229,7 +1273,11 @@ public:
 #ifdef DEBUG_THREADS
 		fprintf(stderr,"%p : CA : WAIT(%p)\n", this,tid);
 #endif
+#ifndef MS_WINDOWS
 		pthread_join(tid,NULL);
+#else
+		pthread_join(*tid, NULL);
+#endif
 	    }
 	}
     ~FDSite()
@@ -1237,11 +1285,20 @@ public:
 #ifdef DEBUG_CREATION
 	    fprintf(stderr,"%p : FD : DTOR\n",this);
 #endif
+#ifndef MS_WINDOWS
 	    close(fd);
+#else
+	    closesocket(fd);
+#endif
 	}
 private:
+#ifndef MS_WINDOWS
     int fd;
     pthread_t tid;
+#else
+    SOCKET fd;
+    pthread_t *tid;
+#endif
     volatile bool interrupted;
     calc_args *params;
     pthread_mutex_t write_lock;
@@ -2506,6 +2563,12 @@ pyarray_set(PyObject *self, PyObject *args)
     return pyRet;
 }
 
+#ifdef MS_WINDOWS
+extern PyObject *PyPipe(PyObject *self, PyObject *);
+extern PyObject *Py_io_add_watch(PyObject *self, PyObject *args);
+extern PyObject *PyRead(PyObject *self, PyObject *args);
+#endif
+
 static PyMethodDef PfMethods[] = {
     {"pf_load",  pf_load, METH_VARARGS, 
      "Load a new point function shared library"},
@@ -2618,6 +2681,15 @@ static PyMethodDef PfMethods[] = {
 
     { "array_set_int", pyarray_set, METH_VARARGS,
       "Set an element in an array allocated in an arena" },
+
+#ifdef MS_WINDOWS
+    { "pipe", PyPipe, METH_NOARGS,
+      "Gets a Windows pipe using the fract4dc CRT" },
+    { "io_add_watch", Py_io_add_watch, METH_VARARGS,
+      "Adds an io watch onto a specific file descriptor (as per GLib)" },
+    { "read", PyRead, METH_VARARGS,
+      "replaces os.read for file descriptors returned from fract4dc.pipe()" },
+#endif
     
     {NULL, NULL, 0, NULL}        /* Sentinel */
 };
