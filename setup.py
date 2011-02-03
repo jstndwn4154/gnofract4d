@@ -205,6 +205,7 @@ else:
 	include_dir = []
 	extra_source = []
 	extra_link = []
+	extra_include = []
 
 fract4d_sources += extra_source
 
