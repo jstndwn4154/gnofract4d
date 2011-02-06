@@ -24,7 +24,10 @@
 
 import getopt
 import sys
-import commands
+if 'win' == sys.platform[:3]:
+	import wincommands as commands
+else:
+	import commands
 import os.path
 import stat
 import random
@@ -426,8 +429,7 @@ class Compiler:
 
         (status,output) = commands.getstatusoutput(cmd)
         if status != 0:
-            raise fracttypes.TranslationError(
-                "Error reported by C compiler:%s" % output)
+            raise fracttypes.TranslationError("Error reported by C compiler:%s" % output)
 
         return outputfile
 
