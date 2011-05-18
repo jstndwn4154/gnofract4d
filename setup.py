@@ -26,7 +26,7 @@ if build_version and build_python and sys.version[:3] != build_version:
 	print "running other Python version %s with args: %s" % (build_python,args)
 	os.execv(build_python, args)
 
-from buildtools import my_bdist_rpm, my_build, my_build_ext, my_install_lib
+from buildtools import my_bdist_rpm, my_build, my_build_ext, my_install_lib, my_install_egg_info
 
 # Extensions need to link against appropriate libs
 # We use pkg-config to find the appropriate set of includes and libs
@@ -198,6 +198,7 @@ if "win" == sys.platform[:3]:
 		extra_include += [ i ]
 	extra_source = [ 'fract4d/c/win32func.cpp', 'fract4d/c/fract4d_stdlib_exports.cpp' ]
 	extra_link = [ 'P:/x86/GTK+/lib', 'P:/x86/GnuWin32/lib' ]
+	icon = ('share/pixmaps', ['pixmaps/gnofract4d-logo.ico'])
 else:
 	warnings = '-Wall'
 	libs = [ 'stdc++' ]
@@ -206,6 +207,8 @@ else:
 	extra_source = []
 	extra_link = []
 	extra_include = []
+	# icon
+	icon = ('share/pixmaps', ['pixmaps/gnofract4d-logo.png'])
 
 fract4d_sources += extra_source
 
@@ -259,8 +262,8 @@ including some which are hybrids between the Mandelbrot and Julia sets,
 and includes a Fractint-compatible parser for your own fractal formulas.''',
 	   author = 'Tim Whidbey',
 	   author_email = 'catenary@users.sourceforge.net',
-	   maintainer = 'Tim whidbey',
-	   maintainer_email = 'catenary@users.sourceforge.net',
+	   maintainer = 'Richard Mant',
+	   maintainer_email = 'dx-mon@users.sourceforge.net',
 	   keywords = "fractal Mandelbrot Julia fractint chaos",
 	   url = 'http://gnofract4d.sourceforge.net/',
 	   packages = ['fract4d', 'fract4dgui', 'fractutils'], 
@@ -295,9 +298,7 @@ and includes a Fractint-compatible parser for your own fractal formulas.''',
 			['pixmaps/improve_now.png',
 			 'pixmaps/explorer_mode.png']),
 
-		   # icon
-		   ('share/pixmaps',
-			['pixmaps/gnofract4d-logo.png']),
+           icon,
 		   
 		   # .desktop file
 		   ('share/applications', ['gnofract4d.desktop']),

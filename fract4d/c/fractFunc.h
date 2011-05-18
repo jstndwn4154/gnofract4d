@@ -31,7 +31,7 @@ class fractFunc {
 	render_type_t render_type,
 	int warp_param,
 	IFractWorker *fw,
-	IImage *_im, 
+	IImage *_im,
 	IFractalSite *_site);
     ~fractFunc();
 
@@ -39,7 +39,7 @@ class fractFunc {
     void set_debug_flags(int debug_flags);
 
     void draw_all();
-    void draw(int rsize, int drawsize, float min_progress, float max_progress);    
+    void draw(int rsize, int drawsize, float min_progress, float max_progress);
     void draw_aa(float min_progress, float max_progress);
     int updateiters();
 
