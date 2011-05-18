@@ -745,7 +745,7 @@ STFractWorker::interpolate_row(int x, int y, int rsize)
 		im->put(x2, y, predicted_color);
 		im->setIter(x2, y, predicted_iter);
 		im->setFate(x2, y, 0, fate);
-		im->setIndex(x2, y, 0, predicted_index);
+		im->setIndex(x2, y, 0, (float)predicted_index);
 		stats.s[PIXELS]++;
 		stats.s[PIXELS_SKIPPED]++;
 	}
