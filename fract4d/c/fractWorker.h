@@ -78,7 +78,7 @@ class STFractWorker : public IFractWorker {
     // linearly interpolate between colors to guess correct color
     rgba_t predict_color(rgba_t colors[2], double factor);
     int predict_iter(int iters[2], double factor);
-    float predict_index(int indexes[2], double factor);
+    double predict_index(float indexes[2], double factor);
 
     // sum squared differences between components of 2 colors
     int diff_colors(rgba_t a, rgba_t b);

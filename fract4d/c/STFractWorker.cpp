@@ -730,7 +730,7 @@ STFractWorker::interpolate_row(int x, int y, int rsize)
 	iters[0] = im->getIter(x, y);
 	iters[1] = im->getIter(x + rsize - 1, y);
 
-	int indexes[2];
+	float indexes[2];
 	indexes[0] = im->getIndex(x, y, 0);
 	indexes[1] = im->getIndex(x + rsize - 1, y, 0);
 
@@ -739,7 +739,7 @@ STFractWorker::interpolate_row(int x, int y, int rsize)
 		double factor = (double)(x2 - x) / rsize;
 		rgba_t predicted_color = predict_color(colors, factor);
 		int predicted_iter = predict_iter(iters, factor);
-		float predicted_index = predict_index(indexes, factor);
+		double predicted_index = predict_index(indexes, factor);
 
 		//check_guess(x2,y,predicted_color,fate,predicted_iter,predicted_index);
 		im->put(x2, y, predicted_color);
@@ -770,8 +770,8 @@ STFractWorker::predict_iter(int iters[2], double factor)
 	return (int)(iters[0] * (1.0 - factor) + iters[1] * factor);
 }
 
-float
-STFractWorker::predict_index(int indexes[2], double factor)
+double
+STFractWorker::predict_index(float indexes[2], double factor)
 {
 	return (indexes[0] * (1.0 - factor) + indexes[1] * factor);
 }
