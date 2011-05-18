@@ -418,12 +418,12 @@ ImageReader *
 ImageReader::create(image_file_t file_type, FILE *fp, IImage *image)
 {
 	//printf("Creating reader for type %d\n", file_type);
+#ifdef PNG_ENABLED
 	switch (file_type)
 	{
-#ifdef PNG_ENABLED
 		case FILE_TYPE_PNG:
 			return new png_reader(fp, image);
-#endif
 	}
+#endif
 	return NULL; // unknown file type
 }
