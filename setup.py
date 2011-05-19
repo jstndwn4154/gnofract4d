@@ -207,7 +207,6 @@ else:
 	extra_source = []
 	extra_link = []
 	extra_include = []
-	# icon
 	icon = ('share/pixmaps', ['pixmaps/gnofract4d-logo.png'])
 
 fract4d_sources += extra_source
