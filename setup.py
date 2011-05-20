@@ -67,18 +67,19 @@ if 'win' == sys.platform[:3]:
 	cache_file = os.path.join(os.getcwd(), 'setup.cache')
 	if os.path.exists(cache_file) == False or os.path.getsize(cache_file) == 0:
 		cache_file = open(cache_file, 'w')
-		png_flags = scan_for_file([], 'png.h', 'x86')
+		png_flags = scan_for_file([], 'png.h', os.path.join('x86','GnuWin32'))
 		if png_flags != []:
 			png_flags[0] = '/I' + png_flags[0] + ''
 			cache_file.write("".join(png_flags) + '\n')
-		png_libs = scan_for_file([], 'libpng.lib', 'x86')
+		png_libs = scan_for_file([], 'libpng.lib', os.path.join('x86','GnuWin32'))
 		if png_libs != []:
 			cache_file.write("".join(png_libs) + '\n')
-		jpg_flags = scan_for_file([], 'jpeglib.h', 'x86')
+		jpg_flags = scan_for_file([], 'jpeglib.h', os.path.join('x86','GnuWin32'))
 		if jpg_flags != []:
 			cache_file.write("".join(jpg_flags) + '\n')
-		jpg_libs = scan_for_file([], 'jpeg.lib', 'x86')
+		jpg_libs = scan_for_file([], 'libjpeg.lib', os.path.join('x86','GnuWin32'))
 		if jpg_libs != []:
+			jpg_libs = [ 'libjpeg' ]
 			cache_file.write("".join(jpg_libs))
 		# cache_file.writelines(png_flags + '\n' + png_libs + '\n' + jpg_flags + '\n' + jpg_libs)
 		cache_file.close()
@@ -101,6 +102,10 @@ if 'win' == sys.platform[:3]:
 #						return jpg_libs
 #			if jpg_libs == []:
 #				print "NO JPEG HEADERS FOUND"
+	if png_libs != []:
+		extra_macros.append(('PNG_ENABLED', 1))
+	if jpg_libs != []:
+		extra_macros.append(('JPG_ENABLED', 1))
 
 else:
 	png_flags = call_package_config("libpng", "--cflags", True)
@@ -313,7 +318,8 @@ and includes a Fractint-compatible parser for your own fractal formulas.''',
 		   "my_bdist_rpm": my_bdist_rpm.my_bdist_rpm,
 		   "build" : my_build.my_build,
 		   "my_build_ext" : my_build_ext.my_build_ext,
-		   "install_lib" : my_install_lib.my_install_lib		   
+		   "install_lib" : my_install_lib.my_install_lib,
+		   "install_egg_info" : my_install_egg_info.my_install_egg_info
 		   }
 	   )
 
