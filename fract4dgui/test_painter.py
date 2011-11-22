@@ -19,38 +19,38 @@ import painter
 import gtkfractal
 
 class FakeEvent:
-    def __init__(self,**kwds):
-        self.__dict__.update(kwds)
+	def __init__(self,**kwds):
+		self.__dict__.update(kwds)
 
 class Test(unittest.TestCase):
-    def setUp(self):
-        self.compiler = fc.Compiler()
-        self.compiler.add_func_path("../formulas")
-        self.compiler.add_func_path("../fract4d")
-        
-        self.f = gtkfractal.T(self.compiler)
-        self.settings = painter.PainterDialog(None,self.f)
+	def setUp(self):
+		self.compiler = fc.Compiler()
+		self.compiler.add_func_path("../formulas")
+		self.compiler.add_func_path("../fract4d")
+		
+		self.f = gtkfractal.T(self.compiler)
+		self.settings = painter.PainterDialog(None,self.f)
 
-    def tearDown(self):
-        pass
-        
-    def wait(self):
-        gtk.main()
-        
-    def quitloop(self,f,status):
-        if status == 0:
-            gtk.main_quit()
+	def tearDown(self):
+		pass
+		
+	def wait(self):
+		gtk.main()
+		
+	def quitloop(self,f,status):
+		if status == 0:
+			gtk.main_quit()
 
-    def testPaintOnUnknown(self):
-        self.assertEqual(True, self.f.paint_mode)
-        event = FakeEvent(x=0,y=0,button=1)
-        self.f.onButtonPress(self.f.widget,event)
-        self.f.onButtonRelease(self.f.widget,event)
+	def testPaintOnUnknown(self):
+		self.assertEqual(True, self.f.paint_mode)
+		event = FakeEvent(x=0,y=0,button=1)
+		self.f.onButtonPress(self.f.widget,event)
+		self.f.onButtonRelease(self.f.widget,event)
 
-        
-        
+		
+		
 def suite():
-    return unittest.makeSuite(Test,'test')
+	return unittest.makeSuite(Test,'test')
 
 if __name__ == '__main__':
-    unittest.main(defaultTest='suite')
+	unittest.main(defaultTest='suite')
