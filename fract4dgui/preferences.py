@@ -90,7 +90,6 @@ class PrefsDialog(dialog.T):
         self.notebook = gtk.Notebook()
         self.vbox.add(self.notebook)
         self.prefs = userPrefs
-        self.tips = gtk.Tooltips()
         self.create_image_options_page()
         self.create_compiler_options_page()
         self.create_general_page()
@@ -113,7 +112,7 @@ class PrefsDialog(dialog.T):
 
     def create_width_entry(self):
         entry = gtk.Entry()
-        self.tips.set_tip(entry,"The image's width in pixels")
+        entry.set_tooltip_text("The image's width in pixels")
         entry.set_activates_default(True)
         
         def set_entry(*args):
@@ -146,7 +145,7 @@ class PrefsDialog(dialog.T):
 
     def create_height_entry(self):
         entry = gtk.Entry()
-        self.tips.set_tip(entry,"The image's height in pixels")
+        entry.set_tooltip_text("The image's height in pixels")
         entry.set_activates_default(True)
         
         def set_entry(*args):
@@ -200,8 +199,7 @@ class PrefsDialog(dialog.T):
 
     def create_save_compress_widget(self):
         widget = gtk.CheckButton(_("Compress _Parameter Files"))
-        self.tips.set_tip(
-            widget,_("Write .fct files in a shorter but unreadable format"))
+        widget.set_tooltip_text(_("Write .fct files in a shorter but unreadable format"))
         widget.set_use_underline(True)
         
         def set_widget(*args):
@@ -223,7 +221,7 @@ class PrefsDialog(dialog.T):
         self.notebook.append_page(table,label)
 
         entry = self.create_option_entry("general","threads")
-        self.tips.set_tip(entry,_("How many threads to use for calculations"))
+        entry.set_tooltip_text(_("How many threads to use for calculations"))
         table.attach(entry,1,2,0,1,gtk.EXPAND | gtk.FILL, 0, 2, 2)
 
         name_label = gtk.Label(_("_Number of threads :"))
@@ -291,7 +289,7 @@ class PrefsDialog(dialog.T):
         self.notebook.append_page(table,label)
                         
         entry = self.create_compiler_entry("name")
-        self.tips.set_tip(entry,_("The C compiler to use"))
+        entry.set_tooltip_text(_("The C compiler to use"))
         table.attach(entry,1,2,0,1,gtk.EXPAND | gtk.FILL, 0, 2, 2)
 
         name_label = gtk.Label(_("Compi_ler :"))
@@ -300,7 +298,7 @@ class PrefsDialog(dialog.T):
         table.attach(name_label,0,1,0,1,0,0,2,2)
         
         entry = self.create_compiler_entry("options")
-        self.tips.set_tip(entry, _("Options to pass to the C compiler"))
+        entry.set_tooltip_text(_("Options to pass to the C compiler"))
         table.attach(entry,1,2,1,2,gtk.EXPAND | gtk.FILL, 0, 2, 2)
 
         flags_label = gtk.Label(_("Compiler _Flags :"))
@@ -316,7 +314,7 @@ class PrefsDialog(dialog.T):
         form_path_section = "formula_path"
 
         pathlist = self.create_directory_list(form_path_section)
-        self.tips.set_tip(pathlist, _("Directories to search for formulas"))
+        pathlist.set_tooltip_text(_("Directories to search for formulas"))
 
         sw.add(pathlist)
 
@@ -343,7 +341,7 @@ class PrefsDialog(dialog.T):
         self.notebook.append_page(table,label)
                         
         entry = self.create_option_entry("helpers","editor")
-        self.tips.set_tip(entry,_("The text editor to use for changing formulas"))
+        entry.set_tooltip_text(_("The text editor to use for changing formulas"))
         table.attach(entry,1,2,0,1,gtk.EXPAND | gtk.FILL, 0, 2, 2)
 
         name_label = gtk.Label("_Editor :")
@@ -352,7 +350,7 @@ class PrefsDialog(dialog.T):
         table.attach(name_label,0,1,0,1,0,0,2,2)
 
         entry = self.create_option_entry("helpers","mailer")
-        self.tips.set_tip(entry,_("The command to launch an email editor"))
+        entry.set_tooltip_text(_("The command to launch an email editor"))
         table.attach(entry,1,2,1,2,gtk.EXPAND | gtk.FILL, 0, 2, 2)
 
         name_label = gtk.Label("E_mail :")
@@ -361,7 +359,7 @@ class PrefsDialog(dialog.T):
         table.attach(name_label,0,1,1,2,0,0,2,2)
 
         entry = self.create_option_entry("helpers","browser")
-        self.tips.set_tip(entry,_("The command to launch a web browser"))
+        entry.set_tooltip_text(_("The command to launch a web browser"))
         table.attach(entry,1,2,2,3,gtk.EXPAND | gtk.FILL, 0, 2, 2)
 
         name_label = gtk.Label("_Browser :")
@@ -402,7 +400,7 @@ class PrefsDialog(dialog.T):
         
     def create_auto_deepen_widget(self):
         widget = gtk.CheckButton("Auto _Deepen")
-        self.tips.set_tip(widget,"Adjust number of iterations automatically")
+        widget.set_tooltip_text("Adjust number of iterations automatically")
         widget.set_use_underline(True)
         
         def set_widget(*args):
@@ -419,7 +417,7 @@ class PrefsDialog(dialog.T):
 
     def create_auto_tolerance_widget(self):
         widget = gtk.CheckButton("Auto _Tolerance")
-        self.tips.set_tip(widget,"Adjust periodicity tolerance automatically")
+        widget.set_tooltip_text("Adjust periodicity tolerance automatically")
         widget.set_use_underline(True)
         
         def set_widget(*args):
@@ -473,7 +471,7 @@ class PrefsDialog(dialog.T):
         table.attach(hlabel,0,1,1,2,0,0,2,2)
 
         self.fix_ratio = gtk.CheckButton("Maintain Aspect _Ratio")
-        self.tips.set_tip(self.fix_ratio,"Keep the image rectangle the same shape when changing its size")
+        self.fix_ratio.set_tooltip_text("Keep the image rectangle the same shape when changing its size")
         self.fix_ratio.set_use_underline(True)
         table.attach(self.fix_ratio,0,2,2,3,gtk.EXPAND | gtk.FILL, 0, 2, 2)
         self.fix_ratio.set_active(True)
