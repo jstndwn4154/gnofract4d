@@ -53,31 +53,39 @@ extra_macros = []
 
 if 'win' == sys.platform[:3]:
 	from win32api import GetLogicalDriveStrings
-	def scan_for_file(out, file, BaseDir = ""):
+
+	def scan_for_file(file, BaseDir = ""):
+		def file_scanner(out, dirpath, files):
+			if file in files:
+				out += [ os.path.join(dirpath, file) ]
+				del files
+				return out
+
+		Out = []
 		for drive in GetLogicalDriveStrings().split('\0'):
-			for (root, dirs, files) in os.walk(drive + BaseDir + '\\'):
-				if len(files) == 0:
-					continue
-				if file in files:
-					out += [ root + '\\' + file ]
-					return out
-		print >>sys.stderr, "FILE NOT FOUND (%s)" % file
-		return []
+			os.path.walk(os.path.join(drive, BaseDir), file_scanner, Out)
+			if Out != []:
+				break
+		if Out == []:
+			print >>sys.stderr, "FILE NOT FOUND (%s)" % file
+			return []
+		else:
+			return Out
 
 	cache_file = os.path.join(os.getcwd(), 'setup.cache')
 	if os.path.exists(cache_file) == False or os.path.getsize(cache_file) == 0:
 		cache_file = open(cache_file, 'w')
-		png_flags = scan_for_file([], 'png.h', os.path.join('x86','GnuWin32'))
+		png_flags = scan_for_file('png.h', os.path.join('x86','GnuWin32'))
 		if png_flags != []:
 			png_flags[0] = '/I' + png_flags[0] + ''
 			cache_file.write("".join(png_flags) + '\n')
-		png_libs = scan_for_file([], 'libpng.lib', os.path.join('x86','GnuWin32'))
+		png_libs = scan_for_file('libpng.lib', os.path.join('x86','GnuWin32'))
 		if png_libs != []:
 			cache_file.write("".join(png_libs) + '\n')
-		jpg_flags = scan_for_file([], 'jpeglib.h', os.path.join('x86','GnuWin32'))
+		jpg_flags = scan_for_file('jpeglib.h', os.path.join('x86','GnuWin32'))
 		if jpg_flags != []:
 			cache_file.write("".join(jpg_flags) + '\n')
-		jpg_libs = scan_for_file([], 'libjpeg.lib', os.path.join('x86','GnuWin32'))
+		jpg_libs = scan_for_file('libjpeg.lib', os.path.join('x86','GnuWin32'))
 		if jpg_libs != []:
 			jpg_libs = [ 'libjpeg' ]
 			cache_file.write("".join(jpg_libs))
