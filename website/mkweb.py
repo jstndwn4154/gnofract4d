@@ -15,9 +15,14 @@ class Bag:
         self.__dict__["url_prefix"]=""
         self.__dict__.update(kwds)
         
-announce = Bag(
-    date="xxx",
-    text="Version 4.0 released. This contains Windows support.")
+announce = [
+	Bag(
+		date="xxx",
+		text="Version 4.0 released. This contains Windows support."),
+	Bag(
+		date="February 2nd, 2013",
+		text="Version 3.14.1 released. This is a bug-fix release including fixes for the manual and build system")
+	]
 
 manual_pages = [
     Bag(name="Using Gnofract 4D",
