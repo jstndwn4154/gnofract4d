@@ -54,11 +54,13 @@ extra_macros = []
 if 'win' == sys.platform[:3]:
 	from win32api import GetLogicalDriveStrings
 
-	def scan_for_file(file, BaseDir = ""):
+	def scan_for_file(file, BaseDir = "", joinFile = False):
 		def file_scanner(out, dirpath, files):
 			if file in files:
-				out += [ os.path.join(dirpath, file) ]
-				del files
+				if joinFile:
+					out += [ os.path.join(dirpath, file) ]
+				else:
+					out += [ dirpath ]
 				return out
 
 		Out = []
@@ -75,17 +77,26 @@ if 'win' == sys.platform[:3]:
 	cache_file = os.path.join(os.getcwd(), 'setup.cache')
 	if os.path.exists(cache_file) == False or os.path.getsize(cache_file) == 0:
 		cache_file = open(cache_file, 'w')
-		png_flags = scan_for_file('png.h', os.path.join('x86','GnuWin32'))
+		png_flags = scan_for_file('png.h', os.path.join('noarch','GnuWin32'))
 		if png_flags != []:
-			png_flags[0] = '/I' + png_flags[0] + ''
-			cache_file.write("".join(png_flags) + '\n')
-		png_libs = scan_for_file('libpng.lib', os.path.join('x86','GnuWin32'))
+			for i in xrange(0, len(png_flags)):
+				png_flags[i] = "/I" + png_flags[i]
+			cache_file.write(" ".join(png_flags) + '\n')
+		if "64 bit" in sys.version:
+			png_libs = scan_for_file('libpng16.lib', os.path.join('x86_64','GnuWin64'), True)
+		else:
+			png_libs = scan_for_file('libpng.lib', os.path.join('x86','GnuWin32'), True)
 		if png_libs != []:
 			cache_file.write("".join(png_libs) + '\n')
 		jpg_flags = scan_for_file('jpeglib.h', os.path.join('x86','GnuWin32'))
 		if jpg_flags != []:
-			cache_file.write("".join(jpg_flags) + '\n')
-		jpg_libs = scan_for_file('libjpeg.lib', os.path.join('x86','GnuWin32'))
+			for i in xrange(0, len(jpg_flags)):
+				jpg_flags[i] = "/I" + jpg_flags[i]
+			cache_file.write(" ".join(jpg_flags) + '\n')
+		if "64 bit" in sys.version:
+			jpg_libs = scan_for_file('libjpeg.lib', os.path.join('x86_64','GnuWin64'), True)
+		else:
+			jpg_libs = scan_for_file('libjpeg.lib', os.path.join('x86','GnuWin32'), True)
 		if jpg_libs != []:
 			jpg_libs = [ 'libjpeg' ]
 			cache_file.write("".join(jpg_libs))
@@ -210,7 +221,10 @@ if "win" == sys.platform[:3]:
 	for i in includes:
 		extra_include += [ i ]
 	extra_source = [ 'fract4d/c/win32func.cpp', 'fract4d/c/fract4d_stdlib_exports.cpp' ]
-	extra_link = [ 'P:/x86/GTK+/lib', 'P:/x86/GnuWin32/lib' ]
+	if "64 bit" in sys.version:
+		extra_link = [ 'P:/x86_64/GTK+/lib', 'P:/x86_64/GnuWin64/lib' ]
+	else:
+		extra_link = [ 'P:/x86/GTK+/lib', 'P:/x86/GnuWin32/lib' ]
 	icon = ('share/pixmaps', ['pixmaps/gnofract4d-logo.ico'])
 else:
 	warnings = '-Wall'
@@ -274,7 +288,7 @@ including some which are hybrids between the Mandelbrot and Julia sets,
 and includes a Fractint-compatible parser for your own fractal formulas.''',
 	   author = 'Tim Whidbey',
 	   author_email = 'catenary@users.sourceforge.net',
-	   maintainer = 'Richard Mant',
+	   maintainer = 'Rachel Mant',
 	   maintainer_email = 'dx-mon@users.sourceforge.net',
 	   keywords = "fractal Mandelbrot Julia fractint chaos",
 	   url = 'http://gnofract4d.sourceforge.net/',
