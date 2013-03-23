@@ -2,6 +2,7 @@
 #define CMAP_H_
 
 #include "color.h"
+#include <sys/types.h>
 
 #ifdef WINDOWS
 	#ifdef _WIN64
@@ -20,17 +21,17 @@ typedef enum
 
 typedef enum
 {
-	BLEND_LINEAR, 
-	BLEND_CURVED, 
-	BLEND_SINE, 
-	BLEND_SPHERE_INCREASING, 
+	BLEND_LINEAR,
+	BLEND_CURVED,
+	BLEND_SINE,
+	BLEND_SPHERE_INCREASING,
 	BLEND_SPHERE_DECREASING
 } e_blendType;
 
 typedef enum
-{ 
-	RGB, 
-	HSV_CCW, 
+{
+	RGB,
+	HSV_CCW,
 	HSV_CW
 } e_colorType;
 
@@ -43,7 +44,7 @@ public:
 	virtual bool init(ssize_t n_colors) = 0;
 	virtual void set_solid(int which, int r, int g, int b, int a);
 	virtual void set_transfer(int which, e_transferType type);
- 
+
 	virtual rgba_t get_solid(int which) const;
 	virtual rgba_t lookup(double index) const = 0;
 
