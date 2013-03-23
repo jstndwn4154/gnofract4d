@@ -32,19 +32,26 @@
 #define PATH_MAX MAX_PATH
 #endif
 #include <direct.h>
-#ifdef _WIN32
+// The following block of definitions are coppied from windows headers
+// as they do stupid things like defining over our FLOAT which causes
+// compilation errors - hence why no #include <WinSock2.h> - it doesn't work.
 extern "C"
 {
-typedef __w64 unsigned int UINT_PTR;
-#else
-typedef unsigned __int64 UINT_PTR;
+// The following UINT_PTR definition is a direct copy from basetsd.h
+#ifndef _BASETSD_H_
+	#ifdef _WIN32
+		typedef __w64 unsigned int UINT_PTR;
+	#else
+		typedef unsigned __int64 UINT_PTR;
+	#endif
 #endif
 #define SOCKET UINT_PTR
+
+// Copped from WinSock2.h
 __declspec(dllimport) int __stdcall send(SOCKET, const char *, int, int);
 __declspec(dllimport) int __stdcall closesocket(SOCKET);
-#ifdef _WIN32
 }
-#endif
+#pragma warning(disable:4267)
 
 int __send(SOCKET s, const void * b, int l, int f)
 {
@@ -112,7 +119,7 @@ ensure_cmap_loaded()
 	char *path_end = strrchr(filename, '/');
 	if (path_end == NULL)
 	{
-		filename = getcwd(cwd, sizeof (cwd));
+		filename = getcwd(cwd, sizeof(cwd));
 		path_end = filename + strlen(filename);
 	}
 
@@ -301,7 +308,7 @@ get_int_field(PyObject *pyitem, const char *name, int *pVal)
 static ColorMap *
 cmap_from_pyobject(PyObject *pyarray)
 {
-	int len, i;
+	ssize_t len, i;
 	GradientColorMap *cmap;
 
 	len = PySequence_Size(pyarray);
@@ -399,7 +406,7 @@ parse_posparams(PyObject *py_posparams, double *pos_params)
 		return false;
 	}
 
-	int len = PySequence_Size(py_posparams);
+	ssize_t len = PySequence_Size(py_posparams);
 	if (len != N_PARAMS)
 	{
 		PyErr_SetString(
@@ -424,7 +431,7 @@ parse_posparams(PyObject *py_posparams, double *pos_params)
 }
 
 static s_param *
-parse_params(PyObject *pyarray, int *plen)
+parse_params(PyObject *pyarray, ssize_t *plen)
 {
 	struct s_param *params;
 
@@ -436,11 +443,10 @@ parse_params(PyObject *pyarray, int *plen)
 		return NULL;
 	}
 
-
-	int len = PySequence_Size(pyarray);
+	ssize_t len = PySequence_Size(pyarray);
 	if (len == 0)
 	{
-		params = (struct s_param *)malloc(sizeof (struct s_param));
+		params = (struct s_param *)malloc(sizeof(struct s_param));
 		params[0].t = FLOAT;
 		params[0].doubleval = 0.0;
 	}
@@ -452,7 +458,7 @@ parse_params(PyObject *pyarray, int *plen)
 	else
 	{
 		int i = 0;
-		params = (struct s_param *)malloc(len * sizeof (struct s_param));
+		params = (struct s_param *)malloc(len * sizeof(struct s_param));
 		if (!params) return NULL;
 		for (i = 0; i < len; ++i)
 		{
@@ -540,11 +546,8 @@ pf_init(PyObject *self, PyObject *args)
 	struct pfHandle *pfh;
 	double pos_params[N_PARAMS];
 
-	if (!PyArg_ParseTuple(
-			args, "OOO", &pyobj, &py_posparams, &pyarray))
-	{
+	if (!PyArg_ParseTuple(args, "OOO", &pyobj, &py_posparams, &pyarray))
 		return NULL;
-	}
 	if (!PyCObject_Check(pyobj))
 	{
 		PyErr_SetString(PyExc_ValueError, "Not a valid handle");
@@ -554,19 +557,15 @@ pf_init(PyObject *self, PyObject *args)
 	pfh = (struct pfHandle *)PyCObject_AsVoidPtr(pyobj);
 
 	if (!parse_posparams(py_posparams, pos_params))
-	{
 		return NULL;
-	}
 
-	int len = 0;
+	ssize_t len = 0;
 	params = parse_params(pyarray, &len);
 	if (!params)
-	{
 		return NULL;
-	}
 
 	/*finally all args are assembled */
-	pfh->pfo->vtbl->init(pfh->pfo, pos_params, params, len);
+	pfh->pfo->vtbl->init(pfh->pfo, pos_params, params, int(len));
 	free(params);
 
 	Py_INCREF(Py_None);
@@ -577,7 +576,7 @@ pf_init(PyObject *self, PyObject *args)
 	to a Python list */
 
 static PyObject *
-params_to_python(struct s_param *params, int len)
+params_to_python(struct s_param *params, ssize_t len)
 {
 	PyObject *pyret = PyList_New(len);
 	if (!pyret)
@@ -585,7 +584,7 @@ params_to_python(struct s_param *params, int len)
 		PyErr_SetString(PyExc_MemoryError, "Can't allocate defaults list");
 		return NULL;
 	}
-	for (int i = 0; i < len; ++i)
+	for (ssize_t i = 0; i < len; ++i)
 	{
 		switch (params[i].t)
 		{
@@ -616,11 +615,8 @@ pf_defaults(PyObject *self, PyObject *args)
 	struct pfHandle *pfh;
 	double pos_params[N_PARAMS];
 
-	if (!PyArg_ParseTuple(
-			args, "OOO", &pyobj, &py_posparams, &pyarray))
-	{
+	if (!PyArg_ParseTuple(args, "OOO", &pyobj, &py_posparams, &pyarray))
 		return NULL;
-	}
 	if (!PyCObject_Check(pyobj))
 	{
 		PyErr_SetString(PyExc_ValueError, "Not a valid handle");
@@ -630,23 +626,19 @@ pf_defaults(PyObject *self, PyObject *args)
 	pfh = (struct pfHandle *)PyCObject_AsVoidPtr(pyobj);
 
 	if (!parse_posparams(py_posparams, pos_params))
-	{
 		return NULL;
-	}
 
-	int len = 0;
+	ssize_t len = 0;
 	params = parse_params(pyarray, &len);
 	if (!params)
-	{
 		return NULL;
-	}
 
 	/*finally all args are assembled */
 	pfh->pfo->vtbl->get_defaults(
 			pfh->pfo,
 			pos_params,
 			params,
-			len);
+			int(len));
 
 
 	PyObject *pyret = params_to_python(params, len);
@@ -709,18 +701,14 @@ cmap_create(PyObject *self, PyObject *args)
 {
 	/* args = an array of (index,r,g,b,a) tuples */
 	PyObject *pyarray, *pyret;
-	int len, i;
+	ssize_t len, i;
 	ListColorMap *cmap;
 
 	if (!PyArg_ParseTuple(args, "O", &pyarray))
-	{
 		return NULL;
-	}
 
 	if (!PySequence_Check(pyarray))
-	{
 		return NULL;
-	}
 
 	len = PySequence_Size(pyarray);
 	if (len == 0)
@@ -730,7 +718,6 @@ cmap_create(PyObject *self, PyObject *args)
 	}
 
 	cmap = new(std::nothrow)ListColorMap();
-
 	if (!cmap)
 	{
 		PyErr_SetString(PyExc_MemoryError, "Can't allocate colormap");
@@ -748,18 +735,14 @@ cmap_create(PyObject *self, PyObject *args)
 		int r, g, b, a;
 		PyObject *pyitem = PySequence_GetItem(pyarray, i);
 		if (!pyitem)
-		{
 			return NULL;
-		}
 		if (!PyArg_ParseTuple(pyitem, "diiii", &d, &r, &g, &b, &a))
-		{
 			return NULL;
-		}
 		cmap->set(i, d, r, g, b, a);
 		Py_DECREF(pyitem);
 	}
-	pyret = PyCObject_FromVoidPtr(cmap, (void (*)(void *))cmap_delete);
 
+	pyret = PyCObject_FromVoidPtr(cmap, (void (*)(void *))cmap_delete);
 	return pyret;
 }
 
@@ -771,18 +754,13 @@ pycmap_set_solid(PyObject *self, PyObject *args)
 	ColorMap *cmap;
 
 	if (!PyArg_ParseTuple(args, "Oiiiii", &pycmap, &which, &r, &g, &b, &a))
-	{
 		return NULL;
-	}
 
 	cmap = (ColorMap *)PyCObject_AsVoidPtr(pycmap);
 	if (!cmap)
-	{
 		return NULL;
-	}
 
 	cmap->set_solid(which, r, g, b, a);
-
 	Py_INCREF(Py_None);
 	return Py_None;
 }
@@ -796,18 +774,13 @@ pycmap_set_transfer(PyObject *self, PyObject *args)
 	ColorMap *cmap;
 
 	if (!PyArg_ParseTuple(args, "Oii", &pycmap, &which, &transfer))
-	{
 		return NULL;
-	}
 
 	cmap = (ColorMap *)PyCObject_AsVoidPtr(pycmap);
 	if (!cmap)
-	{
 		return NULL;
-	}
 
 	cmap->set_transfer(which, transfer);
-
 	Py_INCREF(Py_None);
 	return Py_None;
 }
@@ -821,20 +794,14 @@ cmap_pylookup(PyObject *self, PyObject *args)
 	ColorMap *cmap;
 
 	if (!PyArg_ParseTuple(args, "Od", &pyobj, &d))
-	{
 		return NULL;
-	}
 
 	cmap = (ColorMap *)PyCObject_AsVoidPtr(pyobj);
 	if (!cmap)
-	{
 		return NULL;
-	}
 
 	color = cmap->lookup(d);
-
 	pyret = Py_BuildValue("iiii", color.r, color.g, color.b, color.a);
-
 	return pyret;
 }
 
@@ -849,20 +816,14 @@ cmap_pylookup_with_flags(PyObject *self, PyObject *args)
 	int solid;
 
 	if (!PyArg_ParseTuple(args, "Odii", &pyobj, &d, &solid, &inside))
-	{
 		return NULL;
-	}
 
 	cmap = (ColorMap *)PyCObject_AsVoidPtr(pyobj);
 	if (!cmap)
-	{
 		return NULL;
-	}
 
 	color = cmap->lookup_with_transfer(d, solid, inside);
-
 	pyret = Py_BuildValue("iiii", color.r, color.g, color.b, color.a);
-
 	return pyret;
 }
 
@@ -2863,3 +2824,7 @@ initfract4dc(void)
 	PyModule_AddIntConstant(pymod, "MESSAGE_TYPE_TOLERANCE", TOLERANCE);
 	PyModule_AddIntConstant(pymod, "MESSAGE_TYPE_STATS", STATS);
 }
+
+#ifdef MS_WINDOWS
+#pragma warning(default:4267)
+#endif
