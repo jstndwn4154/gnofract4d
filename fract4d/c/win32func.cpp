@@ -30,6 +30,15 @@
 #define stat_st stat_
 #endif
 
+typedef signed __int64 int64_t;
+typedef unsigned __int64 uint64_t;
+typedef signed int int32_t;
+typedef unsigned int uint32_t;
+typedef signed short int16_t;
+typedef unsigned short uint16_t;
+typedef signed char int8_t;
+typedef unsigned char uint8_t;
+
 int StartResult = -1;
 
 void *ConnectThread(void *socket)
@@ -323,7 +332,7 @@ unsigned int __stdcall write_thread(void *parameter)
 			channel->revents |= G_IO_OUT;
 		else if (nBytes <= 0)
 			channel->revents |= G_IO_ERR;
-		channel->rdp = (channel->rdp + nBytes) % BUFFER_SIZE;
+		channel->rdp = int((channel->rdp + nBytes) % BUFFER_SIZE);
 		if (nBytes <= 0)
 			break;
 		SetEvent(channel->data_avail_event);
@@ -341,7 +350,7 @@ unsigned int __stdcall write_thread(void *parameter)
 
 GIOStatus buffer_read(GIOWin32Channel *channel, char *dest, gsize count, gsize *bytes_read, GError **err)
 {
-	UINT nBytes, left = count;
+	gsize nBytes, left = count;
 	EnterCriticalSection(&channel->mutex);
 	if (channel->wrp == channel->rdp)
 	{
@@ -365,7 +374,7 @@ GIOStatus buffer_read(GIOWin32Channel *channel, char *dest, gsize count, gsize *
 	dest += nBytes;
 	left -= nBytes;
 	EnterCriticalSection(&channel->mutex);
-	channel->rdp = (channel->rdp + nBytes) % BUFFER_SIZE;
+	channel->rdp = int((channel->rdp + nBytes) % BUFFER_SIZE);
 	SetEvent(channel->space_avail_event);
 	if (channel->running != FALSE && channel->wrp == channel->rdp)
 		ResetEvent(channel->data_avail_event);
@@ -376,7 +385,7 @@ GIOStatus buffer_read(GIOWin32Channel *channel, char *dest, gsize count, gsize *
 
 GIOStatus buffer_write(GIOWin32Channel *channel, const char *dest, gsize count, gsize *bytes_written, GError **err)
 {
-	UINT nBytes, left = count;
+	gsize nBytes, left = count;
 	EnterCriticalSection(&channel->mutex);
 	if ((channel->wrp + 1) % BUFFER_SIZE == channel->rdp)
 	{
@@ -392,7 +401,7 @@ GIOStatus buffer_write(GIOWin32Channel *channel, const char *dest, gsize count, 
 	dest += nBytes;
 	left -= nBytes;
 	EnterCriticalSection(&channel->mutex);
-	channel->wrp = (channel->wrp + nBytes) % BUFFER_SIZE;
+	channel->wrp = int((channel->wrp + nBytes) % BUFFER_SIZE);
 	SetEvent(channel->space_avail_event);
 	if ((channel->wrp + 1) % BUFFER_SIZE == channel->rdp)
 		ResetEvent(channel->data_avail_event);
@@ -403,13 +412,13 @@ GIOStatus buffer_write(GIOWin32Channel *channel, const char *dest, gsize count, 
 
 static GIOStatus io_read(GIOChannel *channel, char *buf, gsize count, gsize *bytes_read, GError **err)
 {
-	int result;
+	ssize_t result;
 	GIOWin32Channel *WinChan = (GIOWin32Channel *)channel;
 
 	if (WinChan->thread_id != 0)
 		return buffer_read(WinChan, buf, count, bytes_read, err);
 
-	result = read(WinChan->fd, buf, count);
+	result = read(WinChan->fd, buf, (uint32_t)count);
 	if (result < 0)
 	{
 		*bytes_read = 0;
@@ -417,15 +426,11 @@ static GIOStatus io_read(GIOChannel *channel, char *buf, gsize count, gsize *byt
 		{
 #ifdef EAGAIN
 			case EAGAIN:
-			{
 				return G_IO_STATUS_AGAIN;
-			}
 #endif
 			default:
-			{
 				g_set_error_literal(err, G_IO_CHANNEL_ERROR, g_io_channel_error_from_errno(errno), g_strerror(errno));
 				return G_IO_STATUS_ERROR;
-			}
 		}
 	}
 
@@ -435,13 +440,13 @@ static GIOStatus io_read(GIOChannel *channel, char *buf, gsize count, gsize *byt
 
 static GIOStatus io_write(GIOChannel *channel, const char *buf, gsize count, gsize *bytes_written, GError **err)
 {
-	int result;
+	ssize_t result;
 	GIOWin32Channel *WinChan = (GIOWin32Channel *)channel;
 
 	if (WinChan->thread_id != 0)
 		return buffer_write(WinChan, buf, count, bytes_written, err);
 
-	result = write(WinChan->fd, buf, count);
+	result = write(WinChan->fd, buf, (uint32_t)count);
 	if (result < 0)
 	{
 		*bytes_written = 0;
@@ -781,10 +786,11 @@ static GSource *io_console_create_watch(GIOChannel *channel, GIOCondition condit
 static GIOStatus io_sock_read(GIOChannel *channel, char *buf, gsize count, gsize *bytes_read, GError **err)
 {
 	GIOWin32Channel *WinChan = (GIOWin32Channel *)channel;
-	int result, winsock_error;
+	int winsock_error;
+	ssize_t result;
 	GIOChannelError error;
 
-	result = recv(WinChan->fd, buf, count, 0);
+	result = recv(WinChan->fd, buf, (uint32_t)count, 0);
 	if (result == SOCKET_ERROR)
 	{
 		char *emsg;
@@ -825,10 +831,11 @@ static GIOStatus io_sock_read(GIOChannel *channel, char *buf, gsize count, gsize
 static GIOStatus io_sock_write(GIOChannel *channel, const char *buf, gsize count, gsize *bytes_written, GError **err)
 {
 	GIOWin32Channel *WinChan = (GIOWin32Channel *)channel;
-	int result, winsock_error;
+	int winsock_error;
+	ssize_t result;
 	GIOChannelError error;
 
-	result = send(WinChan->fd, buf, count, 0);
+	result = send(WinChan->fd, buf, (uint32_t)count, 0);
 	if (result == SOCKET_ERROR)
 	{
 		char *emsg;
@@ -1057,12 +1064,6 @@ GIOChannel *new_io_channel_socket(int socket)
 
 	return ret;
 }
-
-#ifdef _WIN32
-typedef __w64 unsigned int UINT_PTR;
-#else
-typedef unsigned __int64 UINT_PTR;
-#endif
 
 void doNotCrash(const wchar_t *, const wchar_t *, const wchar_t *, unsigned int, UINT_PTR)
 {
