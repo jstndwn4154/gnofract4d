@@ -70,7 +70,7 @@ bool tga_writer::save_header()
 	tga_header[14] = im->totalYres() & 0xFF;
 	tga_header[15] = im->totalYres() >> 8;
 
-	int written = fwrite(tga_header, 1, sizeof (tga_header), fp);
+	size_t written = fwrite(tga_header, 1, sizeof(tga_header), fp);
 	if (written != sizeof (tga_header))
 	{
 		return false;
@@ -102,7 +102,7 @@ bool tga_writer::save_footer()
 		'-', 'X', 'F', 'I', 'L', 'E', '.'
 	};
 
-	int written = fwrite(tga_footer, 1, sizeof (tga_footer), fp);
+	size_t written = fwrite(tga_footer, 1, sizeof(tga_footer), fp);
 	if (written != sizeof (tga_footer))
 	{
 		return false;
@@ -113,13 +113,19 @@ bool tga_writer::save_footer()
 #ifdef PNG_ENABLED
 extern "C"
 {
-#include "png.h"
+	#include "png.h"
 }
+
+// Backwards compatability defines coppied from an older png.h
+#ifndef int_p_NULL
+#define int_p_NULL NULL
+#define png_bytepp_NULL NULL
+#define png_infopp_NULL NULL
+#endif
 
 class png_writer : public image_writer
 {
 public:
-
 	png_writer(FILE *fp, IImage *image) : image_writer(fp, image)
 	{
 		ok = false;
@@ -128,9 +134,7 @@ public:
 			NULL, NULL, NULL); // FIXME do more error handling
 
 		if (NULL == png_ptr)
-		{
 			return;
-		}
 
 		info_ptr = png_create_info_struct(png_ptr);
 		if (NULL == info_ptr)
@@ -147,16 +151,13 @@ public:
 		}
 
 		png_init_io(png_ptr, fp);
-
 		ok = true;
 	};
 
 	~png_writer()
 	{
 		if (ok)
-		{
 			png_destroy_write_struct(&png_ptr, &info_ptr);
-		}
 	}
 
 	bool save_header();
@@ -207,7 +208,7 @@ png_writer::save_footer()
 #ifdef JPG_ENABLED
 extern "C"
 {
-#include "jpeglib.h"
+	#include "jpeglib.h"
 }
 
 class jpg_writer : public image_writer
