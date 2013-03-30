@@ -26,7 +26,7 @@ if build_version and build_python and sys.version[:3] != build_version:
 	print "running other Python version %s with args: %s" % (build_python,args)
 	os.execv(build_python, args)
 
-from buildtools import my_bdist_rpm, my_build, my_build_ext, my_install_lib, my_install_egg_info
+from buildtools import my_bdist_rpm, my_build, my_build_ext, my_install_lib, my_install_egg_info, my_build_mo
 
 # Extensions need to link against appropriate libs
 # We use pkg-config to find the appropriate set of includes and libs
@@ -341,7 +341,8 @@ and includes a Fractint-compatible parser for your own fractal formulas.''',
 		   "build" : my_build.my_build,
 		   "my_build_ext" : my_build_ext.my_build_ext,
 		   "install_lib" : my_install_lib.my_install_lib,
-		   "install_egg_info" : my_install_egg_info.my_install_egg_info
+		   "install_egg_info" : my_install_egg_info.my_install_egg_info,
+		   "my_build_mo" : my_build_mo.my_build_mo
 		   }
 	   )
 
