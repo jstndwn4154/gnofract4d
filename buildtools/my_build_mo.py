@@ -34,5 +34,5 @@ class my_build_mo(Command):
 					else:
 						srcMtime = os.stat(src)[8]
 						destMtime = os.stat(dest)[8]
-						if (srcMtime > dstMtime):
+						if (srcMtime > destMtime):
 							self.__compile_mo(src, dest)
