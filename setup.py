@@ -279,6 +279,12 @@ if have_gmp:
 def get_files(dir,ext):
 	return [ os.path.join(dir,x) for x in os.listdir(dir) if x.endswith(ext)] 
 
+mo = []
+for lang in os.listdir('build/locale'):
+	langDir = os.path.join('share', 'locale', lang, 'LC_MESSAGES')
+	langFile = os.path.join('build', 'locale', lang, 'LC_MESSAGES', 'gnofract4d.mo')
+	mo.append((langDir, [langFile]))
+
 setup (name = 'gnofract4d',
 	   version = gnofract4d_version,
 	   description = 'A program to draw fractals',
@@ -335,7 +341,7 @@ and includes a Fractint-compatible parser for your own fractal formulas.''',
 		   # doc files
 		   ('share/doc/gnofract4d',
 			['COPYING', 'README']),
-		   ],
+		   ] + mo,
 	   cmdclass={
 		   "my_bdist_rpm": my_bdist_rpm.my_bdist_rpm,
 		   "build" : my_build.my_build,
