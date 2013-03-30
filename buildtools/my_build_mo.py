@@ -2,6 +2,7 @@
 
 from distutils.core import Command
 from distutils.spawn import spawn
+from distutils import log
 
 import os
 
@@ -16,7 +17,9 @@ class my_build_mo(Command):
 
 	def __compile_mo(self, src, dest):
 		print "Compiling %s" % src
+		oldLevel = log.set_threshold(log.WARN)
 		spawn(['msgfmt', src, '--output-file', dest])
+		log.set_threshold(oldLevel)
 
 	def run(self):
 		poPath = os.path.join(os.path.dirname(os.curdir), 'po')
