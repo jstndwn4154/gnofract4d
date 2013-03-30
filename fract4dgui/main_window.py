@@ -83,11 +83,7 @@ class MainWindow:
 			pass
 			
 		self.model = model.Model(self.f)
-
-		preferences.userPrefs.connect(
-			'image-preferences-changed',
-			self.on_prefs_changed)
-
+		preferences.userPrefs.connect('image-preferences-changed', self.on_prefs_changed)
 		browser.update(self.f.forms[0].funcFile, self.f.forms[0].funcName)
 			
 		self.create_ui()
