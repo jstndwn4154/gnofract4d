@@ -76,7 +76,7 @@ msgstr "_Autozoom"
 
 #: fract4dgui/icons.py:48 fract4dgui/main_window.py:625
 msgid "_Randomize Colors"
-msgstr "_Randomize Colors"
+msgstr "_Randomize Colours"
 
 #: fract4dgui/main_window.py:108
 msgid "Done"
@@ -325,11 +325,11 @@ msgstr "Create animations"
 
 #: fract4dgui/main_window.py:626
 msgid "Apply a new random color scheme"
-msgstr "Apply a new random color scheme"
+msgstr "Apply a new random colour scheme"
 
 #: fract4dgui/main_window.py:628
 msgid "Change colors interactively"
-msgstr "Change colors interactively"
+msgstr "Change colours interactively"
 
 #: fract4dgui/main_window.py:630
 msgid "_Help"
@@ -525,7 +525,7 @@ msgstr "How different to make the random mutant fractals"
 
 #: fract4dgui/main_window.py:909
 msgid "Color:"
-msgstr "Color:"
+msgstr "Colour:"
 
 #: fract4dgui/main_window.py:1101
 #, python-format
@@ -632,11 +632,11 @@ msgstr "Fractal Function"
 
 #: fract4dgui/browser.py:227
 msgid "Outer Coloring Function"
-msgstr "Outer Coloring Function"
+msgstr "Outer Colouring Function"
 
 #: fract4dgui/browser.py:228
 msgid "Inner Coloring Function"
-msgstr "Inner Coloring Function"
+msgstr "Inner Colouring Function"
 
 #: fract4dgui/browser.py:229
 msgid "Transform Function"
@@ -805,7 +805,7 @@ msgstr ""
 
 #: fract4dgui/utils.py:276
 msgid "Select a Color"
-msgstr "Select a Color"
+msgstr "Select a Colour"
 
 #: fract4dgui/renderqueue.py:153
 msgid "Render Queue"
@@ -833,11 +833,11 @@ msgstr "_Browse..."
 
 #: fract4dgui/settings.py:186
 msgid "Color of segment's left end"
-msgstr "Color of segment's left end"
+msgstr "Colour of segment's left end"
 
 #: fract4dgui/settings.py:191
 msgid "Color of segment's right end"
-msgstr "Color of segment's right end"
+msgstr "Colour of segment's right end"
 
 #: fract4dgui/settings.py:202
 msgid "Split"
@@ -849,15 +849,15 @@ msgstr "Remove"
 
 #: fract4dgui/settings.py:212
 msgid "<Copy"
-msgstr "<Copy"
+msgstr "Copy Left"
 
 #: fract4dgui/settings.py:217
 msgid "Copy>"
-msgstr "Copy>"
+msgstr "Copy Right"
 
 #: fract4dgui/settings.py:312
 msgid "_Colors"
-msgstr "_Colors"
+msgstr "_Colours"
 
 #: fract4dgui/settings.py:319
 msgid "_Location"
@@ -953,11 +953,11 @@ msgstr "Browse available fractal functions"
 
 #: fract4dgui/settings.py:618 fract4dgui/settings.py:631
 msgid "Coloring Method"
-msgstr "Coloring Method"
+msgstr "Colouring Method"
 
 #: fract4dgui/settings.py:619 fract4dgui/settings.py:632
 msgid "Browse available coloring functions"
-msgstr "Browse available coloring functions"
+msgstr "Browse available colouring functions"
 
 #: fract4dgui/settings.py:623
 msgid "Outer"
