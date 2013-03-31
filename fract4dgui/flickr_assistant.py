@@ -24,7 +24,7 @@ class FlickrGTKSlave(slave.GTKSlave):
 	def response(self):
 		if self.process.returncode:
 			# an error occurred
-			raise Exception("An error occurred:\n%s" % self.err_output)
+			raise Exception(_("An error occurred:\n%s") % self.err_output)
 		return flickr.parseResponse(self.output)			
 		
 def is_authorized():
