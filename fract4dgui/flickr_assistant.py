@@ -275,12 +275,12 @@ To set that up, please click on the following link and follow the instructions o
 
 """)
 
-	success_text=_("""Congratulations, you've successfully authorized Gnofract 4D to access Flickr. Your user details are:
+	success_text="""Congratulations, you've successfully authorized Gnofract 4D to access Flickr. Your user details are:
 
    Username : %s
    Full Name : %s
 
-Click Finish to save your credentials and proceed.""")
+Click Finish to save your credentials and proceed."""
 	
 
 	NEXT=1
