@@ -1396,18 +1396,6 @@ msgid ""
 "\n"
 msgstr ""
 
-#: fract4dgui/flickr_assistant.py:278
-#, python-format
-msgid ""
-"Congratulations, you've successfully authorized Gnofract 4D to access "
-"Flickr. Your user details are:\n"
-"\n"
-"   Username : %s\n"
-"   Full Name : %s\n"
-"\n"
-"Click Finish to save your credentials and proceed."
-msgstr ""
-
 #: fract4dgui/flickr_assistant.py:291
 msgid "Flickr Integration Setup"
 msgstr ""
