@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnofract 4d\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-30 00:35+0000\n"
-"PO-Revision-Date: 2013-03-31 13:17+0100\n"
+"POT-Creation-Date: 2013-03-31 15:22+0200\n"
+"PO-Revision-Date: 2013-03-31 15:36+0100\n"
 "Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: German\n"
 "Language: de\n"
@@ -20,6 +20,18 @@ msgstr ""
 #: fract4dgui/gtkgradient.py:16
 msgid "Gradients"
 msgstr "Verläufe"
+
+#: fract4dgui/gtkgradient.py:80 fract4dgui/main_window.py:909
+msgid "Color:"
+msgstr "Farbe:"
+
+#: fract4dgui/gtkgradient.py:86
+msgid "Color..."
+msgstr "Farbe …"
+
+#: fract4dgui/gtkgradient.py:88 fract4dgui/utils.py:276
+msgid "Select a Color"
+msgstr "Farbe auswählen"
 
 #: fract4dgui/gtkgradient.py:100
 msgid "Alternation:"
@@ -40,6 +52,15 @@ msgstr "Versatz:"
 #: fract4dgui/hig.py:59
 msgid "Don't show this message again"
 msgstr "Diesen Hinweis nicht mehr anzeigen"
+
+#: fract4dgui/hig.py:138
+msgid "If you don't save, changes will be discarded."
+msgstr "Nicht gespeicherte Änderungen werden verworfen."
+
+#: fract4dgui/hig.py:140
+#, fuzzy, python-format
+msgid "If you don't save, changes from the past %s "
+msgstr "Nicht gespeicherte Änderungen sind unwiederbringlich verloren."
 
 #: fract4dgui/hig.py:143
 #, python-format
@@ -63,8 +84,9 @@ msgid "_Mail To"
 msgstr "E-_Mail senden"
 
 #: fract4dgui/icons.py:42 fract4dgui/main_window.py:627
+#, fuzzy
 msgid "_Painter"
-msgstr ""
+msgstr "Maler-&Werkzeuge"
 
 #: fract4dgui/icons.py:44
 msgid "_Report Bug"
@@ -188,7 +210,7 @@ msgstr "Das aktuelle Bild speichern"
 #: fract4dgui/main_window.py:570
 #, fuzzy
 msgid "Save _High-Res Image..."
-msgstr "Bild »%s« konnte nicht gespeichert werden."
+msgstr "Hochauflösendes Bild speichern"
 
 #: fract4dgui/main_window.py:571
 msgid "Save a higher-resolution version of the current image"
@@ -220,7 +242,7 @@ msgstr "_Bearbeiten"
 
 #: fract4dgui/main_window.py:590
 msgid "_Fractal Settings..."
-msgstr "_Fractaleinstellungen …"
+msgstr "_Fraktaleinstellungen …"
 
 #: fract4dgui/main_window.py:591
 msgid "Edit the fractal's settings"
@@ -316,9 +338,8 @@ msgid "Formula _Browser"
 msgstr "Formel_browser"
 
 #: fract4dgui/main_window.py:622
-#, fuzzy
 msgid "Browse available formulas"
-msgstr "Durchsuchen der verfügbaren Kodierungen."
+msgstr "Durchsuchen der verfügbaren Formeln"
 
 #: fract4dgui/main_window.py:623 fract4dgui/director.py:471
 msgid "_Director"
@@ -383,7 +404,7 @@ msgstr "Info zu Gnofract 4D"
 
 #: fract4dgui/main_window.py:646
 msgid "Planes"
-msgstr ""
+msgstr "Ebenen"
 
 #: fract4dgui/main_window.py:647
 msgid "_XY (Mandelbrot)"
@@ -541,10 +562,6 @@ msgstr ""
 msgid "How different to make the random mutant fractals"
 msgstr ""
 
-#: fract4dgui/main_window.py:909
-msgid "Color:"
-msgstr "Farbe:"
-
 #: fract4dgui/main_window.py:1101
 #, python-format
 msgid "Error saving to file %s"
@@ -618,10 +635,18 @@ msgstr ""
 msgid "_Min Size"
 msgstr "_Normalgröße"
 
+#: fract4dgui/AVIGen.py:21
+msgid "Generating AVI file..."
+msgstr "AVI-Datei wird erzeugt …"
+
+#: fract4dgui/AVIGen.py:26
+msgid "Please wait..."
+msgstr "Bitte warten …"
+
 #: fract4dgui/AVIGen.py:93
-#, fuzzy, python-format
+#, python-format
 msgid "Error during generation of avi file: %s"
-msgstr "Während der Dateiübertragung ist ein Netzwerkfehler aufgetreten."
+msgstr "Fehler während der Erzeugung der AVI-Datei: %s"
 
 #: fract4dgui/painter.py:21
 #, fuzzy
@@ -713,9 +738,27 @@ msgstr "Warnungen:\n"
 msgid "No messages"
 msgstr "Keine Meldungen"
 
+#: fract4dgui/PNGGen.py:30
+#, fuzzy
+msgid "Current image progress"
+msgstr "Aktueller Fortschritt der Wiedergabe"
+
+#: fract4dgui/PNGGen.py:34
+#, fuzzy
+msgid "Overall progress"
+msgstr "Gesamtfortschritt:"
+
 #: fract4dgui/PNGGen.py:52
 msgid "Error processing keyframes"
 msgstr "Fehler bei der Verarbeitung der Schüsselbilder"
+
+#: fract4dgui/PNGGen.py:70
+msgid "Error during image generation"
+msgstr "Fehler beim Erzeugen des Bildes"
+
+#: fract4dgui/PNGGen.py:70
+msgid "Unknown"
+msgstr "Unbekannt"
 
 #: fract4dgui/PNGGen.py:91
 #, python-format
@@ -733,6 +776,14 @@ msgstr "Einstellungen für Gnofract4D"
 #: fract4dgui/preferences.py:85
 msgid "Select a Formula Directory"
 msgstr "Einen Formelordner auswählen"
+
+#: fract4dgui/preferences.py:115
+msgid "The image's width in pixels"
+msgstr "Breite des Bildes in Pixeln"
+
+#: fract4dgui/preferences.py:148
+msgid "The image's height in pixels"
+msgstr "Höhe des Bildes in Pixeln"
 
 #: fract4dgui/preferences.py:201
 msgid "Compress _Parameter Files"
@@ -821,6 +872,51 @@ msgstr "_Flickr"
 msgid "_Sign out from Flickr"
 msgstr "Von Flickr _abmelden"
 
+#: fract4dgui/preferences.py:402
+#, fuzzy
+msgid "Auto _Deepen"
+msgstr "Auto-Einrücken"
+
+#: fract4dgui/preferences.py:403
+#, fuzzy
+msgid "Adjust number of iterations automatically"
+msgstr "Spaltenanzahl automatisch erkennen:"
+
+#: fract4dgui/preferences.py:419
+#, fuzzy
+msgid "Auto _Tolerance"
+msgstr "Auto-Einrücken"
+
+#: fract4dgui/preferences.py:420
+#, fuzzy
+msgid "Adjust periodicity tolerance automatically"
+msgstr "Zulässige absolute Toleranz"
+
+#: fract4dgui/preferences.py:453
+msgid "_Image"
+msgstr "_Bild"
+
+#: fract4dgui/preferences.py:460
+msgid "_Width :"
+msgstr "_Breite:"
+
+#: fract4dgui/preferences.py:468
+msgid "_Height :"
+msgstr "_Höhe:"
+
+#: fract4dgui/preferences.py:473
+#, fuzzy
+msgid "Maintain Aspect _Ratio"
+msgstr "Seitenverhältnis _umkehren"
+
+#: fract4dgui/preferences.py:474
+msgid "Keep the image rectangle the same shape when changing its size"
+msgstr ""
+
+#: fract4dgui/preferences.py:491
+msgid "_Antialiasing : "
+msgstr "_Kantenglättung:"
+
 #: fract4dgui/utils.py:247
 msgid "Error launching browser"
 msgstr "Fehler beim Öffnen des Browsers"
@@ -829,10 +925,6 @@ msgstr "Fehler beim Öffnen des Browsers"
 msgid ""
 "Try modifying your preferences or copy the URL manually to a browser window.\n"
 msgstr ""
-
-#: fract4dgui/utils.py:276
-msgid "Select a Color"
-msgstr "Farbe auswählen"
 
 #: fract4dgui/renderqueue.py:153
 #, fuzzy
@@ -852,9 +944,8 @@ msgid "_Progress"
 msgstr "_Fortschritt"
 
 #: fract4dgui/settings.py:27
-#, fuzzy
 msgid "Fractal Settings"
-msgstr "Netzwerkeinstellungen"
+msgstr "Fraktaleinstellungen"
 
 #: fract4dgui/settings.py:146 fract4dgui/settings.py:517
 msgid "_Browse..."
@@ -870,11 +961,19 @@ msgstr "Nach unten links: <keycap>Ende</keycap>"
 msgid "Color of segment's right end"
 msgstr "Farbe der rechten Maustaste:"
 
+#: fract4dgui/settings.py:193
+msgid "Left Color:"
+msgstr "Linke Farbe:"
+
+#: fract4dgui/settings.py:197
+msgid "Right Color:"
+msgstr "Rechte Farbe:"
+
 #: fract4dgui/settings.py:202
 msgid "Split"
 msgstr "Teilen"
 
-#: fract4dgui/settings.py:207
+#: fract4dgui/settings.py:207 fract4dgui/director.py:568
 msgid "Remove"
 msgstr "Entfernen"
 
@@ -887,6 +986,14 @@ msgstr "_Kopieren"
 #, fuzzy
 msgid "Copy>"
 msgstr "_Kopieren"
+
+#: fract4dgui/settings.py:230
+msgid "Inner Color:"
+msgstr "Innere Farbe:"
+
+#: fract4dgui/settings.py:234
+msgid "Outer Color:"
+msgstr "Äußere Farbe:"
 
 #: fract4dgui/settings.py:312
 msgid "_Colors"
@@ -1007,6 +1114,32 @@ msgstr ""
 msgid "Inner"
 msgstr "I_nnere Legitimierung:"
 
+#: fract4dgui/director_prefs.py:13
+msgid "Choose directory..."
+msgstr "Ordner auswählen …"
+
+#: fract4dgui/director_prefs.py:37
+msgid "Director preferences..."
+msgstr "Regisseur-Einstellungen …"
+
+#: fract4dgui/director_prefs.py:50
+#, fuzzy
+msgid "Temporary directory for .fct files:"
+msgstr "Ordner zum Speichern temporärer Dateien"
+
+#: fract4dgui/director_prefs.py:58 fract4dgui/director_prefs.py:77
+msgid "Browse"
+msgstr "Durchsuchen"
+
+#: fract4dgui/director_prefs.py:65
+#, fuzzy
+msgid "Create temporary .fct files"
+msgstr "Ort für temporäre Dateien"
+
+#: fract4dgui/director_prefs.py:70
+msgid "Temporary directory for .png files:"
+msgstr "Temporärer Ordner für .png-Dateien:"
+
 #: fract4dgui/director.py:48
 #, python-format
 msgid ""
@@ -1015,12 +1148,14 @@ msgid ""
 msgstr ""
 
 #: fract4dgui/director.py:59
+#, fuzzy
 msgid "Directory for temporary .fct files not set"
-msgstr ""
+msgstr "Pfad für temporäre .png-Dateien ist kein Ordner"
 
 #: fract4dgui/director.py:64
+#, fuzzy
 msgid "Path for temporary .fct files is not a directory"
-msgstr ""
+msgstr "Pfad für temporäre .png-Dateien ist kein Ordner"
 
 #: fract4dgui/director.py:81
 msgid "Directory for temporary .fct files contains other .fct files"
@@ -1036,8 +1171,9 @@ msgid "There must be at least two keyframes"
 msgstr ""
 
 #: fract4dgui/director.py:96
+#, fuzzy
 msgid "Directory for temporary .png files not set"
-msgstr ""
+msgstr "Pfad für temporäre .png-Dateien ist kein Ordner"
 
 #: fract4dgui/director.py:101
 msgid "Path for temporary .png files is not a directory"
@@ -1046,6 +1182,26 @@ msgstr "Pfad für temporäre .png-Dateien ist kein Ordner"
 #: fract4dgui/director.py:105
 msgid "Output AVI file name not set"
 msgstr ""
+
+#: fract4dgui/director.py:113
+msgid "Choose keyframe..."
+msgstr "Schlüsselbild auswählen …"
+
+#: fract4dgui/director.py:122 fract4dgui/director.py:159
+msgid "All files"
+msgstr "Alle Dateien"
+
+#: fract4dgui/director.py:136
+msgid "Save AVI file..."
+msgstr "AVI-Datei speichern …"
+
+#: fract4dgui/director.py:149
+msgid "Save animation..."
+msgstr "Animation speichern …"
+
+#: fract4dgui/director.py:173
+msgid "Choose animation..."
+msgstr "Animation wählen …"
 
 #: fract4dgui/director.py:233
 msgid "Cannot Generate Animation"
@@ -1092,11 +1248,152 @@ msgstr "Animation _speichern"
 msgid "_Preferences"
 msgstr "_Einstellungen"
 
+#: fract4dgui/director.py:509
+msgid "From file"
+msgstr "Aus Datei"
+
+#: fract4dgui/director.py:513
+msgid "From current fractal"
+msgstr "Aus aktuellem Fraktal"
+
+#: fract4dgui/director.py:519
+msgid "Keyframes"
+msgstr "Schüsselbilder"
+
+#: fract4dgui/director.py:563
+msgid "Add"
+msgstr "Hinzufügen"
+
+#: fract4dgui/director.py:577
+msgid "Current Keyframe"
+msgstr "Aktuelles Schlüsselbild"
+
+#: fract4dgui/director.py:587
+msgid "Duration"
+msgstr "Dauer"
+
+#: fract4dgui/director.py:595
+#, fuzzy
+msgid "Keyframe stopped for:"
+msgstr "Bereit für das Meeting?"
+
+#: fract4dgui/director.py:603
+msgid "Interpolation type:"
+msgstr "Interpolationstyp:"
+
+#: fract4dgui/director.py:615
+msgid "Advanced options"
+msgstr "Erweiterte Optionen"
+
+#: fract4dgui/director.py:622
+msgid "Output options"
+msgstr "Optionen für die Ausgabe"
+
+#: fract4dgui/director.py:628
+#, fuzzy
+msgid "Resulting video file:"
+msgstr "Videodatei %1 von %2 (%3) wird geprüft"
+
+#: fract4dgui/director.py:643
+msgid "Resolution:"
+msgstr "Auflösung:"
+
+#: fract4dgui/director.py:663
+msgid "Frame rate:"
+msgstr "Bildwiederholrate:"
+
+#: fract4dgui/director.py:671
+msgid "Swap red and blue component"
+msgstr ""
+
 #: fract4dgui/director.py:693
 msgid ""
 "Transcode utility not found. Without it we can't generate any video but can "
 "still save sequences of still images."
 msgstr ""
+
+#: fract4dgui/DlgAdvOpt.py:18
+msgid "Keyframe advanced options..."
+msgstr "Erweiterte Optionen für Schlüsselbilder …"
+
+#: fract4dgui/DlgAdvOpt.py:32
+msgid "XY angles interpolation direction:"
+msgstr ""
+
+#: fract4dgui/DlgAdvOpt.py:35 fract4dgui/DlgAdvOpt.py:44
+#: fract4dgui/DlgAdvOpt.py:53 fract4dgui/DlgAdvOpt.py:62
+#: fract4dgui/DlgAdvOpt.py:71 fract4dgui/DlgAdvOpt.py:80
+msgid "Nearer"
+msgstr ""
+
+#: fract4dgui/DlgAdvOpt.py:36 fract4dgui/DlgAdvOpt.py:45
+#: fract4dgui/DlgAdvOpt.py:54 fract4dgui/DlgAdvOpt.py:63
+#: fract4dgui/DlgAdvOpt.py:72 fract4dgui/DlgAdvOpt.py:81
+#, fuzzy
+msgid "Longer"
+msgstr "länger als"
+
+#: fract4dgui/DlgAdvOpt.py:37 fract4dgui/DlgAdvOpt.py:46
+#: fract4dgui/DlgAdvOpt.py:55 fract4dgui/DlgAdvOpt.py:64
+#: fract4dgui/DlgAdvOpt.py:73 fract4dgui/DlgAdvOpt.py:82
+msgid "Clockwise"
+msgstr "Im Uhrzeigersinn"
+
+#: fract4dgui/DlgAdvOpt.py:38 fract4dgui/DlgAdvOpt.py:47
+#: fract4dgui/DlgAdvOpt.py:56 fract4dgui/DlgAdvOpt.py:65
+#: fract4dgui/DlgAdvOpt.py:74 fract4dgui/DlgAdvOpt.py:83
+msgid "Counterclockwise"
+msgstr "Gegen den Uhrzeigersinn"
+
+#: fract4dgui/DlgAdvOpt.py:41
+msgid "XZ angles interpolation direction:"
+msgstr ""
+
+#: fract4dgui/DlgAdvOpt.py:50
+msgid "XW angles interpolation direction:"
+msgstr ""
+
+#: fract4dgui/DlgAdvOpt.py:59
+msgid "YZ angles interpolation direction:"
+msgstr ""
+
+#: fract4dgui/DlgAdvOpt.py:68
+msgid "YW angles interpolation direction:"
+msgstr ""
+
+#: fract4dgui/DlgAdvOpt.py:77
+msgid "ZW angles interpolation direction:"
+msgstr ""
+
+#: fract4dgui/FCTGen.py:37
+#, fuzzy
+msgid "Generating .fct files..."
+msgstr "Ausführbare Textdateien"
+
+#: fract4dgui/FCTGen.py:52
+msgid "Could not find gnofract4d version. Can not continue"
+msgstr ""
+
+#: fract4dgui/FCTGen.py:64
+msgid "Gnofract4d libs could not be found"
+msgstr "Die Gnofract4d-Bibliotheken konnten nicht gefunden werden"
+
+#: fract4dgui/FCTGen.py:74 fract4dgui/FCTGen.py:78
+msgid "Unknown error during reading base keyframe"
+msgstr ""
+
+#: fract4dgui/FCTGen.py:109
+msgid "Unknown error during generation of .fct files"
+msgstr "Unbekannter Fehler bei der Erzeugung der .fct-Dateien"
+
+#: fract4dgui/flickr_assistant.py:27
+#, python-format
+msgid ""
+"An error occurred:\n"
+"%s"
+msgstr ""
+"Es ist ein Fehler aufgetreten:\n"
+"%s"
 
 #: fract4dgui/flickr_assistant.py:53
 msgid "Upload Error"
@@ -1179,9 +1476,8 @@ msgid ""
 msgstr ""
 
 #: fract4dgui/flickr_assistant.py:291
-#, fuzzy
 msgid "Flickr Integration Setup"
-msgstr "RSS-Nachrichtenquellen einrichten"
+msgstr "Einrichtung der Flickr-Anbindung"
 
 #: fract4dgui/flickr_assistant.py:295
 #, fuzzy
