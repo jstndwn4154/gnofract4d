@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gnofract 4d\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-30 00:35+0000\n"
-"PO-Revision-Date: 2013-03-30 00:38+0000\n"
+"POT-Creation-Date: 2013-03-31 17:16+0100\n"
+"PO-Revision-Date: 2013-03-31 17:16+0100\n"
 "Last-Translator: root <dx-mon@users.sourceforge.net>\n"
 "Language-Team: English\n"
 "Language: en_US\n"
@@ -402,14 +402,6 @@ msgstr "_ZY (Elliptic)"
 #: fract4dgui/main_window.py:657
 msgid "_WY (Rectangular)"
 msgstr "_WY (Rectangular)"
-
-#: fract4dgui/main_window.py:690
-msgid "/MenuBar/EditMenu/EditUndo"
-msgstr "/MenuBar/EditMenu/EditUndo"
-
-#: fract4dgui/main_window.py:692
-msgid "/MenuBar/EditMenu/EditRedo"
-msgstr "/MenuBar/EditMenu/EditRedo"
 
 #: fract4dgui/main_window.py:736
 msgid "Sorry, your version of PyGTK does not support full screen display"

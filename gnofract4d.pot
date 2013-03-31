@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-30 00:35+0000\n"
+"POT-Creation-Date: 2013-03-31 17:16+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -401,14 +401,6 @@ msgstr ""
 
 #: fract4dgui/main_window.py:657
 msgid "_WY (Rectangular)"
-msgstr ""
-
-#: fract4dgui/main_window.py:690
-msgid "/MenuBar/EditMenu/EditUndo"
-msgstr ""
-
-#: fract4dgui/main_window.py:692
-msgid "/MenuBar/EditMenu/EditRedo"
 msgstr ""
 
 #: fract4dgui/main_window.py:736
