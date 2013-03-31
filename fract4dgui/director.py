@@ -110,7 +110,7 @@ class DirectorDialog(dialog.T,hig.MessagePopper):
 	#returns selected file or empty string
 	def get_fct_file(self):
 		temp_file=""
-		dialog = gtk.FileChooserDialog("Choose keyframe...",None,gtk.FILE_CHOOSER_ACTION_OPEN,
+		dialog = gtk.FileChooserDialog(_("Choose keyframe..."),None,gtk.FILE_CHOOSER_ACTION_OPEN,
 			(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN, gtk.RESPONSE_OK))
 		dialog.set_default_response(gtk.RESPONSE_OK)
 		#----setting filters---------
@@ -119,7 +119,7 @@ class DirectorDialog(dialog.T,hig.MessagePopper):
 		filter.add_pattern("*.fct")
 		dialog.add_filter(filter)
 		filter = gtk.FileFilter()
-		filter.set_name("All files")
+		filter.set_name(_("All files"))
 		filter.add_pattern("*")
 		dialog.add_filter(filter)
 		#----------------------------
@@ -133,7 +133,7 @@ class DirectorDialog(dialog.T,hig.MessagePopper):
 	#returns selected file or empty string
 	def get_avi_file(self):
 		temp_file=""
-		dialog = gtk.FileChooserDialog("Save AVI file...",None,gtk.FILE_CHOOSER_ACTION_SAVE,
+		dialog = gtk.FileChooserDialog(_("Save AVI file..."),None,gtk.FILE_CHOOSER_ACTION_SAVE,
 			(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN, gtk.RESPONSE_OK))
 		dialog.set_default_response(gtk.RESPONSE_OK)
 		response = dialog.run()
@@ -146,7 +146,7 @@ class DirectorDialog(dialog.T,hig.MessagePopper):
 	#returns selected file or empty string
 	def get_cfg_file_save(self):
 		temp_file=""
-		dialog = gtk.FileChooserDialog("Save animation...",None,gtk.FILE_CHOOSER_ACTION_SAVE,
+		dialog = gtk.FileChooserDialog(_("Save animation..."),None,gtk.FILE_CHOOSER_ACTION_SAVE,
 			(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN, gtk.RESPONSE_OK))
 		dialog.set_default_response(gtk.RESPONSE_OK)
 		dialog.set_current_name("animation.fcta")
@@ -156,7 +156,7 @@ class DirectorDialog(dialog.T,hig.MessagePopper):
 		filter.add_pattern("*.fcta")
 		dialog.add_filter(filter)
 		filter = gtk.FileFilter()
-		filter.set_name("All files")
+		filter.set_name(_("All files"))
 		filter.add_pattern("*")
 		dialog.add_filter(filter)
 		#----------------------------
@@ -170,7 +170,7 @@ class DirectorDialog(dialog.T,hig.MessagePopper):
 	#returns selected file or empty string
 	def get_cfg_file_open(self):
 		temp_file=""
-		dialog = gtk.FileChooserDialog("Choose animation...",None,gtk.FILE_CHOOSER_ACTION_OPEN,
+		dialog = gtk.FileChooserDialog(_("Choose animation..."),None,gtk.FILE_CHOOSER_ACTION_OPEN,
 			(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN, gtk.RESPONSE_OK))
 		dialog.set_default_response(gtk.RESPONSE_OK)
 		#----setting filters---------
@@ -506,17 +506,17 @@ class DirectorDialog(dialog.T,hig.MessagePopper):
 		#-----------creating popup menu-------------------------------
 		#popup menu for keyframes
 		self.popup_menu=gtk.Menu()
-		self.mnu_pop_add_file=gtk.MenuItem("From file")
+		self.mnu_pop_add_file=gtk.MenuItem(_("From file"))
 		self.popup_menu.append(self.mnu_pop_add_file)
 		self.mnu_pop_add_file.connect("activate", self.add_from_file, None)
 		self.mnu_pop_add_file.show()
-		self.mnu_pop_add_current=gtk.MenuItem("From current fractal")
+		self.mnu_pop_add_current=gtk.MenuItem(_("From current fractal"))
 		self.popup_menu.append(self.mnu_pop_add_current)
 		self.mnu_pop_add_current.connect("activate", self.add_from_current, None)
 		self.mnu_pop_add_current.show()
 
 		#--------------Keyframes box-----------------------------------
-		self.frm_kf=gtk.Frame("Keyframes")
+		self.frm_kf=gtk.Frame(_("Keyframes"))
 		self.frm_kf.set_border_width(10)
 		self.hbox_kfs=gtk.HBox(False,0)
 		self.tbl_keyframes_left=gtk.Table(2,2,False)
@@ -560,12 +560,12 @@ class DirectorDialog(dialog.T,hig.MessagePopper):
 		self.current_select=-1
 		self.tbl_keyframes_left.attach(self.sw,0,2,0,1)
 
-		self.btn_add_keyframe=gtk.Button("Add",gtk.STOCK_ADD)
+		self.btn_add_keyframe=gtk.Button(_("Add"),gtk.STOCK_ADD)
 		#self.btn_add_keyframe.connect("clicked",self.add_keyframe_clicked,None)
 		self.btn_add_keyframe.connect_object("event",self.add_keyframe_clicked,self.popup_menu)
 		self.tbl_keyframes_left.attach(self.btn_add_keyframe,0,1,1,2,0,0)
 
-		self.btn_remove_keyframe=gtk.Button("Remove",gtk.STOCK_REMOVE)
+		self.btn_remove_keyframe=gtk.Button(_("Remove"),gtk.STOCK_REMOVE)
 		self.btn_remove_keyframe.connect("clicked",self.remove_keyframe_clicked,None)
 		self.tbl_keyframes_left.attach(self.btn_remove_keyframe,1,2,1,2,0,0)
 		self.hbox_kfs.pack_start(self.tbl_keyframes_left,True,True,10)
@@ -574,7 +574,7 @@ class DirectorDialog(dialog.T,hig.MessagePopper):
 		self.box_main.pack_start(self.frm_kf,True,True,0)
 
 		# current keyframe box
-		self.current_kf=gtk.Frame("Current Keyframe")
+		self.current_kf=gtk.Frame(_("Current Keyframe"))
 		self.current_kf.set_border_width(10)
 
 		self.box_main.pack_start(self.current_kf,True,True,0)
@@ -584,7 +584,7 @@ class DirectorDialog(dialog.T,hig.MessagePopper):
 		self.tbl_keyframes_right.set_col_spacings(10)
 		self.tbl_keyframes_right.set_border_width(10)
 
-		self.lbl_duration=gtk.Label("Duration")
+		self.lbl_duration=gtk.Label(_("Duration"))
 		self.tbl_keyframes_right.attach(self.lbl_duration,0,1,0,1)
 
 		adj_duration=gtk.Adjustment(25,1,10000,1,10)
@@ -592,7 +592,7 @@ class DirectorDialog(dialog.T,hig.MessagePopper):
 		self.spin_duration.connect("output",self.duration_changed,None)
 		self.tbl_keyframes_right.attach(self.spin_duration,1,2,0,1)
 
-		self.lbl_kf_stop=gtk.Label("Keyframe stopped for:")
+		self.lbl_kf_stop=gtk.Label(_("Keyframe stopped for:"))
 		self.tbl_keyframes_right.attach(self.lbl_kf_stop,0,1,1,2)
 
 		adj_kf_stop=gtk.Adjustment(1,1,10000,1,10)
@@ -600,7 +600,7 @@ class DirectorDialog(dialog.T,hig.MessagePopper):
 		self.spin_kf_stop.connect("output",self.stop_changed,None)
 		self.tbl_keyframes_right.attach(self.spin_kf_stop,1,2,1,2)
 
-		self.lbl_int_type=gtk.Label("Interpolation type:")
+		self.lbl_int_type=gtk.Label(_("Interpolation type:"))
 		self.tbl_keyframes_right.attach(self.lbl_int_type,0,1,2,3)
 
 		self.cmb_interpolation_type=gtk.combo_box_new_text() #gtk.ComboBox()
@@ -612,20 +612,20 @@ class DirectorDialog(dialog.T,hig.MessagePopper):
 		self.cmb_interpolation_type.connect("changed",self.interpolation_type_changed,None)
 		self.tbl_keyframes_right.attach(self.cmb_interpolation_type,1,2,2,3)
 
-		self.btn_adv_opt=gtk.Button("Advanced options")
+		self.btn_adv_opt=gtk.Button(_("Advanced options"))
 		self.btn_adv_opt.connect("clicked",self.adv_opt_clicked,None)
 		self.tbl_keyframes_right.attach(self.btn_adv_opt,0,2,3,4)
 
 		self.current_kf.add(self.tbl_keyframes_right) #,False,False,10)
 		#-------------------------------------------------------------------
 		#----------------------output box-----------------------------------
-		self.frm_output=gtk.Frame("Output options")
+		self.frm_output=gtk.Frame(_("Output options"))
 		self.frm_output.set_border_width(10)
 
 		self.box_output_main=gtk.VBox(True,10)
 		self.box_output_file=gtk.HBox(False,10)
 
-		self.lbl_temp_avi=gtk.Label("Resulting video file:")
+		self.lbl_temp_avi=gtk.Label(_("Resulting video file:"))
 		self.box_output_file.pack_start(self.lbl_temp_avi,False,False,10)
 
 		self.txt_temp_avi=gtk.Entry(0)
@@ -640,7 +640,7 @@ class DirectorDialog(dialog.T,hig.MessagePopper):
 
 		self.box_output_res=gtk.HBox(False,10)
 
-		self.lbl_res=gtk.Label("Resolution:")
+		self.lbl_res=gtk.Label(_("Resolution:"))
 		self.box_output_res.pack_start(self.lbl_res,False,False,10)
 
 		adj_width=gtk.Adjustment(640,320,2048,10,100,0)
@@ -660,7 +660,7 @@ class DirectorDialog(dialog.T,hig.MessagePopper):
 
 		self.box_output_framerate=gtk.HBox(False,10)
 
-		self.lbl_framerate=gtk.Label("Frame rate:")
+		self.lbl_framerate=gtk.Label(_("Frame rate:"))
 		self.box_output_framerate.pack_start(self.lbl_framerate,False,False,10)
 
 		adj_framerate=gtk.Adjustment(25,5,100,1,5,0)
@@ -668,7 +668,7 @@ class DirectorDialog(dialog.T,hig.MessagePopper):
 		self.spin_framerate.connect("output",self.output_framerate_changed,None)
 		self.box_output_framerate.pack_start(self.spin_framerate,False,False,10)
 
-		self.chk_swapRB=gtk.CheckButton("Swap red and blue component")
+		self.chk_swapRB=gtk.CheckButton(_("Swap red and blue component"))
 		self.chk_swapRB.set_active(True)
 		self.chk_swapRB.connect("toggled",self.swap_redblue_clicked,None)
 		self.box_output_framerate.pack_start(self.chk_swapRB,False,False,50)
