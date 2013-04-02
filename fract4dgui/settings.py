@@ -190,11 +190,11 @@ class SettingsDialog(dialog.T):
 		self.right_color_button.widget.set_tooltip_text(
 			_("Color of segment's right end"))
 
-		table.attach(gtk.Label("Left Color:"),
+		table.attach(gtk.Label(_("Left Color:")),
 					 0,1,0,1)
 		table.attach(self.left_color_button.widget,
 					 1,2,0,1, gtk.EXPAND | gtk.FILL, gtk.EXPAND)
-		table.attach(gtk.Label("Right Color:"),
+		table.attach(gtk.Label(_("Right Color:")),
 					 2,3,0,1)
 		table.attach(self.right_color_button.widget,
 					 3,4,0,1, gtk.EXPAND | gtk.FILL, gtk.EXPAND)
@@ -227,11 +227,11 @@ class SettingsDialog(dialog.T):
 			utils.floatColorFrom256(self.f.solids[0]),
 			self.solid_color_changed, 0)
 
-		table.attach(gtk.Label("Inner Color:"),
+		table.attach(gtk.Label(_("Inner Color:")),
 					 0,1,2,3)
 		table.attach(self.inner_solid_button.widget,
 					 1,2,2,3, gtk.EXPAND | gtk.FILL, gtk.EXPAND)
-		table.attach(gtk.Label("Outer Color:"),
+		table.attach(gtk.Label(_("Outer Color:")),
 					 2,3,2,3)
 		table.attach(self.outer_solid_button.widget,
 					 3,4,2,3, gtk.EXPAND | gtk.FILL, gtk.EXPAND)

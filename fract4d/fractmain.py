@@ -21,8 +21,7 @@ class T:
 
         width = options.width or fractconfig.instance.getint("display","width")
         height = options.height or fractconfig.instance.getint("display","height")        
-        threads = options.threads or fractconfig.instance.getint(
-            "general","threads")
+        threads = options.threads or fractconfig.instance.getint("general","threads")
 
         if len(options.args) > 0:
             self.load(options.args[0])

@@ -83,11 +83,7 @@ class MainWindow:
 			pass
 			
 		self.model = model.Model(self.f)
-
-		preferences.userPrefs.connect(
-			'image-preferences-changed',
-			self.on_prefs_changed)
-
+		preferences.userPrefs.connect('image-preferences-changed', self.on_prefs_changed)
 		browser.update(self.f.forms[0].funcFile, self.f.forms[0].funcName)
 			
 		self.create_ui()
@@ -691,9 +687,9 @@ class MainWindow:
 		self.vbox.pack_start(self.menubar, False, True, 0)
 		
 		# this could be done with an actiongroup, but since it already works...
-		undo = self.manager.get_widget(_("/MenuBar/EditMenu/EditUndo"))
+		undo = self.manager.get_widget("/MenuBar/EditMenu/EditUndo")
 		self.model.seq.make_undo_sensitive(undo)
-		redo = self.manager.get_widget(_("/MenuBar/EditMenu/EditRedo"))
+		redo = self.manager.get_widget("/MenuBar/EditMenu/EditRedo")
 		self.model.seq.make_redo_sensitive(redo)
 
 		self.recent_menuitems = [

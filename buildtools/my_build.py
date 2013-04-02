@@ -16,5 +16,4 @@ class my_build (build):
                 name = "my_build_ext"
             new_commands.append((name,pred))
             
-        build.sub_commands = new_commands
-
+        build.sub_commands = new_commands + [('my_build_mo', None)]

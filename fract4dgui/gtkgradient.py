@@ -77,15 +77,15 @@ class GradientDialog(dialog.T):
 		
 		###COLOR SELECTION###
 		if gtk.pygtk_version[0] >= 2 and gtk.pygtk_version[1] >= 4:
-			lblCsel = gtk.Label("Color:")
+			lblCsel = gtk.Label(_("Color:"))
 			self.csel = gtk.ColorButton(
 					utils.create_color(hData.col[0], hData.col[1], hData.col[2]))
 			self.csel.connect('color-set', self.colorchanged)
 			self.colorbutton = True
 		else:
-			self.csel = gtk.Button("Color...")
+			self.csel = gtk.Button(_("Color..."))
 			self.csel.connect('clicked', self.cbutton_clicked)
-			self.csel_dialog = gtk.ColorSelectionDialog("Select a Color")
+			self.csel_dialog = gtk.ColorSelectionDialog(_("Select a Color"))
 			self.csel_dialog.colorsel.set_current_color(
 					utils.create_color(hData.col[0], hData.col[1], hData.col[2]))
 

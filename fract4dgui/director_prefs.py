@@ -10,7 +10,7 @@ class DirectorPrefs:
 	#returns selected folder or empty string
 	def get_folder(self):
 		temp_folder=""
-		dialog = gtk.FileChooserDialog("Choose directory...",None,gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER,
+		dialog = gtk.FileChooserDialog(_("Choose directory..."),None,gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER,
 			(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN, gtk.RESPONSE_OK))
 		dialog.set_default_response(gtk.RESPONSE_OK)
 		response = dialog.run()
@@ -34,7 +34,7 @@ class DirectorPrefs:
 			self.txt_temp_png.set_text(fold)
 
 	def __init__(self,animation):
-		self.dialog=gtk.Dialog("Director preferences...",None,
+		self.dialog=gtk.Dialog(_("Director preferences..."),None,
 					gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
 					(gtk.STOCK_OK,gtk.RESPONSE_OK,gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL))
 
@@ -47,7 +47,7 @@ class DirectorPrefs:
 		self.tbl_dirs.set_col_spacings(10)
 		self.tbl_dirs.set_border_width(10)
 
-		self.lbl_temp_fct=gtk.Label("Temporary directory for .fct files:")
+		self.lbl_temp_fct=gtk.Label(_("Temporary directory for .fct files:"))
 		self.tbl_dirs.attach(self.lbl_temp_fct,0,1,1,2)
 
 		self.txt_temp_fct=gtk.Entry(0)
@@ -55,26 +55,26 @@ class DirectorPrefs:
 		self.txt_temp_fct.set_sensitive(False)
 		self.tbl_dirs.attach(self.txt_temp_fct,1,2,1,2)
 
-		self.btn_temp_fct=gtk.Button("Browse")
+		self.btn_temp_fct=gtk.Button(_("Browse"))
 		self.btn_temp_fct.connect("clicked",self.temp_fct_clicked,None)
 		self.btn_temp_fct.set_sensitive(False)
 		self.tbl_dirs.attach(self.btn_temp_fct,2,3,1,2)
 
 		#this check box goes after (even if it's above above widgets because
 		#we connect and change its state here and it change those buttons, so they wouldn't exist
-		self.chk_create_fct=gtk.CheckButton("Create temporary .fct files")
+		self.chk_create_fct=gtk.CheckButton(_("Create temporary .fct files"))
 		self.chk_create_fct.connect("toggled",self.create_fct_toggled,None)
 		self.chk_create_fct.set_active(self.animation.get_fct_enabled())
 		self.tbl_dirs.attach(self.chk_create_fct,0,1,0,1)
 
-		self.lbl_temp_png=gtk.Label("Temporary directory for .png files:")
+		self.lbl_temp_png=gtk.Label(_("Temporary directory for .png files:"))
 		self.tbl_dirs.attach(self.lbl_temp_png,0,1,2,3)
 
 		self.txt_temp_png=gtk.Entry(0)
 		self.txt_temp_png.set_text(self.animation.get_png_dir())
 		self.tbl_dirs.attach(self.txt_temp_png,1,2,2,3)
 
-		self.btn_temp_png=gtk.Button("Browse")
+		self.btn_temp_png=gtk.Button(_("Browse"))
 		self.btn_temp_png.connect("clicked",self.temp_png_clicked,None)
 		self.tbl_dirs.attach(self.btn_temp_png,2,3,2,3)
 

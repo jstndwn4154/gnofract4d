@@ -34,7 +34,7 @@ from fract4d import animation, fractal, fc, fractconfig
 class FCTGeneration:	
 	def __init__(self,dir_bean,parent):
 		self.dialog=gtk.Dialog(
-			"Generating .fct files...",parent,
+			_("Generating .fct files..."),parent,
 			gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
 			(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL))
 		
@@ -49,7 +49,7 @@ class FCTGeneration:
 		self.durations=[]
 		version=self.find_version()
 		if version=='-1':
-			self.show_error("Could not find gnofract4d version. Can not continue")
+			self.show_error(_("Could not find gnofract4d version. Can not continue"))
 			yield False
 			return
 		#-------------loads gnofract4d libs----------------------------
@@ -61,7 +61,7 @@ class FCTGeneration:
 			self.compiler.add_func_path(
 				fractconfig.instance.get_data_path("formulas"))
 		except:
-			self.show_error("Gnofract4d libs could not be found")
+			self.show_error(_("Gnofract4d libs could not be found"))
 			yield False
 			return
 		#--------------------------------------------------------------
@@ -71,11 +71,11 @@ class FCTGeneration:
 			if len(ret)==11:
 				self.values.append(ret)
 			else:
-				self.show_error("Unknown error during reading base keyframe")
+				self.show_error(_("Unknown error during reading base keyframe"))
 				yield False
 				return
 		except:
-			self.show_error("Unknown error during reading base keyframe")
+			self.show_error(_("Unknown error during reading base keyframe"))
 			yield False
 			return
 		try:
@@ -106,7 +106,7 @@ class FCTGeneration:
 				self.pbar.set_text(str(percent*100)+"%")
 				yield True
 		except:
-			self.show_error("Unknown error during generation of .fct files")
+			self.show_error(_("Unknown error during generation of .fct files"))
 			yield False
 			return
 			

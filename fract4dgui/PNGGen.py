@@ -27,11 +27,11 @@ class PNGGeneration(gtk.Dialog,hig.MessagePopper):
 			(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL))
 
 		hig.MessagePopper.__init__(self)
-		self.lbl_image=gtk.Label("Current image progress")
+		self.lbl_image=gtk.Label(_("Current image progress"))
 		self.vbox.pack_start(self.lbl_image,True,True,0)
 		self.pbar_image = gtk.ProgressBar()
 		self.vbox.pack_start(self.pbar_image,True,True,0)
-		self.lbl_overall=gtk.Label("Overall progress")
+		self.lbl_overall=gtk.Label(_("Overall progress"))
 		self.vbox.pack_start(self.lbl_overall,True,True,0)
 		self.pbar_overall = gtk.ProgressBar()
 		self.vbox.pack_start(self.pbar_overall,True,True,0)
@@ -67,7 +67,7 @@ class PNGGeneration(gtk.Dialog,hig.MessagePopper):
 			yield True
 
 		if thread_error==True:
-			self.show_error("Error during image generation", "Unknown")
+			self.show_error(_("Error during image generation"), _("Unknown"))
 			yield False
 			return
 
