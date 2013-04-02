@@ -602,7 +602,7 @@ class SettingsDialog(dialog.T):
 		self.create_formula_widget_table(
 			formbox,
 			0,
-			_("Formula"), 
+			_("_Formula"), 
 			_("Browse available fractal functions"))
 		
 		vbox.pack_start(formbox, False, False, 0)
@@ -620,7 +620,7 @@ class SettingsDialog(dialog.T):
 
 		vbox.pack_start(formbox, False, False, 0)
 		self.create_formula_text_area(vbox,1,FormulaTypes.COLORFUNC)
-		self.add_notebook_page(vbox,_("Outer"))
+		self.add_notebook_page(vbox,_("_Outer"))
 		
 	def create_inner_page(self):
 		vbox = gtk.VBox()
@@ -633,7 +633,7 @@ class SettingsDialog(dialog.T):
 
 		vbox.pack_start(formbox, False, False, 0)
 		self.create_formula_text_area(vbox,2,FormulaTypes.COLORFUNC)
-		self.add_notebook_page(vbox, _("Inner"))
+		self.add_notebook_page(vbox, _("_Inner"))
 
 
 	def update_transform_parameters(self, parent, *args):

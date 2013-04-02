@@ -433,7 +433,7 @@ class PrefsDialog(dialog.T):
 		return widget
 
 	def create_antialias_menu(self):
-		optMenu = utils.create_option_menu(["None", "Fast", "Best"])
+		optMenu = utils.create_option_menu([_("None"), _("Fast"), _("Best")])
 
 		def set_widget(*args):
 			utils.set_selected(optMenu, self.prefs.getint("display","antialias"))
