@@ -48,7 +48,7 @@ class MainWindow:
 			gtk.keysyms.Up : self.on_key_up,
 			gtk.keysyms.Down : self.on_key_down,
 			gtk.keysyms.Escape : self.on_key_escape
-			}
+		}
 
 		self.accelgroup = gtk.AccelGroup()
 		self.window.add_accel_group(self.accelgroup)
@@ -84,6 +84,7 @@ class MainWindow:
 			
 		self.model = model.Model(self.f)
 		preferences.userPrefs.connect('image-preferences-changed', self.on_prefs_changed)
+
 		browser.update(self.f.forms[0].funcFile, self.f.forms[0].funcName)
 			
 		self.create_ui()
@@ -105,12 +106,14 @@ class MainWindow:
 		
 		self.update_image_prefs(preferences.userPrefs)
 		
-		self.statuses = [ _("Done"),
-						  _("Calculating"),
-						  _("Deepening ({0} iterations)"),
-						  _("Antialiasing"),
-						  _("Paused"),
-						  _("Reducing Periodicity Tolerance")]
+		self.statuses = [
+			_("Done"),
+			_("Calculating"),
+			_("Deepening ({0} iterations)"),
+			_("Antialiasing"),
+			_("Paused"),
+			_("Reducing Periodicity Tolerance")
+		]
 
 		self.f.set_saved(True)
 
@@ -382,21 +385,19 @@ class MainWindow:
 			self.f.update_formula()
 
 	def update_image_prefs(self,prefs):
-		(w,h) = (prefs.getint("display","width"),
-				 prefs.getint("display","height"))
+		(w, h) = (prefs.getint("display","width"), prefs.getint("display","height"))
 		if self.show_subfracts:
-			w = w //2 ; h = h // 2
+			w = w //2
+			h = h // 2
 			for f in self.subfracts:
-				f.set_size(w//2, h//2)
-			w += 2; h += 2
+				f.set_size(w // 2, h // 2)
+			w += 2
+			h += 2
 		self.f.set_size(w,h)
 			
-		self.f.set_antialias(
-			prefs.getint("display","antialias"))
-		self.f.set_auto_deepen(
-			prefs.getboolean("display","autodeepen"))
-		self.f.set_auto_tolerance(
-			prefs.getboolean("display","autotolerance"))
+		self.f.set_antialias(prefs.getint("display","antialias"))
+		self.f.set_auto_deepen(prefs.getboolean("display","autodeepen"))
+		self.f.set_auto_tolerance(prefs.getboolean("display","autotolerance"))
 
 	def on_prefs_changed(self,prefs):
 		self.f.freeze()
@@ -554,7 +555,7 @@ class MainWindow:
 			('ToolsExplorerAction', icons.explorer.stock_name, _('_Explorer'),
 			 '<control>E', _('Create random fractals similar to this one'), 
 			 self.toggle_explorer)
-			]
+		]
 			
 	def get_main_actions(self):
 		return [
@@ -639,7 +640,7 @@ class MainWindow:
 			 '', _('Report a bug you\'ve found'), self.report_bug),
 			('HelpAboutAction', gtk.STOCK_ABOUT, _('_About'), 
 			 None, _('About Gnofract 4D'), self.about)
-			]
+		]
 
 	def get_fourd_actions(self):
 		return [
@@ -656,7 +657,7 @@ class MainWindow:
 			 '<control>5', None, self.set_yz_plane),
 			('PlanesWYAction', None, _('_WY (Rectangular)'),
 			 '<control>6', None, self.set_wy_plane)
-			]
+		]
 
 	def create_ui(self):
 		self.manager = gtk.UIManager()
@@ -696,7 +697,8 @@ class MainWindow:
 			self.manager.get_widget("/MenuBar/FileMenu/Recent1"),
 			self.manager.get_widget("/MenuBar/FileMenu/Recent2"),
 			self.manager.get_widget("/MenuBar/FileMenu/Recent3"),
-			self.manager.get_widget("/MenuBar/FileMenu/Recent4")]
+			self.manager.get_widget("/MenuBar/FileMenu/Recent4")
+		]
 
 
 	def director(self,*args):
@@ -746,9 +748,7 @@ class MainWindow:
 			self.window.move(0, 0)
 
 			screen = self.window.get_screen()
-			preferences.userPrefs.set_size(
-				screen.get_width(),
-				screen.get_height())
+			preferences.userPrefs.set_size(screen.get_width(), screen.get_height())
 			
 			# TODO: may be useful for 'desktop mode' one day
 			#self.window.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DESKTOP)
@@ -796,41 +796,23 @@ class MainWindow:
 		self.f.connect('parameters-changed', self.update_preview)
 		self.f.connect('pointer-moved', self.update_preview_on_pointer)
 		
-		self.toolbar.add_widget(
-			self.preview.widget,
-			_("Preview"),
-			_("Shows what the next operation would do"))
+		self.toolbar.add_widget(self.preview.widget, _("Preview"), _("Shows what the next operation would do"))
 
 		# angles
 		self.toolbar.add_space()
 
-		self.create_angle_widget(
-			_("xy"), _("Angle in the XY plane"), fractal.T.XYANGLE, False)
-
-		self.create_angle_widget(
-			_("xz"), _("Angle in the XZ plane"), fractal.T.XZANGLE, True)
-
-		self.create_angle_widget(
-			_("xw"), _("Angle in the XW plane"), fractal.T.XWANGLE, True)
-
-		self.create_angle_widget(
-			_("yz"), _("Angle in the YZ plane"), fractal.T.YZANGLE, True)
-
-		self.create_angle_widget(
-			_("yw"), _("Angle in the YW plane"), fractal.T.YWANGLE, True)
-
-		self.create_angle_widget(
-			_("zw"), _("Angle in the ZW plane"), fractal.T.ZWANGLE, True)
+		self.create_angle_widget(_("xy"), _("Angle in the XY plane"), fractal.T.XYANGLE, False)
+		self.create_angle_widget(_("xz"), _("Angle in the XZ plane"), fractal.T.XZANGLE, True)
+		self.create_angle_widget(_("xw"), _("Angle in the XW plane"), fractal.T.XWANGLE, True)
+		self.create_angle_widget(_("yz"), _("Angle in the YZ plane"), fractal.T.YZANGLE, True)
+		self.create_angle_widget(_("yw"), _("Angle in the YW plane"), fractal.T.YWANGLE, True)
+		self.create_angle_widget(_("zw"), _("Angle in the ZW plane"), fractal.T.ZWANGLE, True)
 
 		# fourways
 		self.toolbar.add_space()
 		
-		self.add_fourway(
-			_("pan"),
-			_("Pan around the image"), 0, False)
-		self.add_fourway(
-			_("warp"),
-			_("Mutate the image by moving along the other 2 axes"), 2, True)
+		self.add_fourway(_("pan"), _("Pan around the image"), 0, False)
+		self.add_fourway(_("warp"), _("Mutate the image by moving along the other 2 axes"), 2, True)
 
 		self.add_warpmenu(_("Which parameter is being warped"))
 			
@@ -844,26 +826,14 @@ class MainWindow:
 
 		res_menu = self.create_resolution_menu()
 
-		self.toolbar.add_widget(
-			res_menu,
-			_("Resolution"),
-			_("Change fractal's resolution"))			
+		self.toolbar.add_widget(res_menu, _("Resolution"), _("Change fractal's resolution"))			
 
 		# undo/redo
 		self.toolbar.add_space()
 
-		self.toolbar.add_stock(
-			gtk.STOCK_UNDO,
-			_("Undo the last change"),
-			self.undo)
-
+		self.toolbar.add_stock(gtk.STOCK_UNDO, _("Undo the last change"), self.undo)
 		self.model.seq.make_undo_sensitive(self.toolbar.get_children()[-1])
-		
-		self.toolbar.add_stock(
-			gtk.STOCK_REDO,
-			_("Redo the last undone change"),
-			self.redo)
-		
+		self.toolbar.add_stock(gtk.STOCK_REDO, _("Redo the last undone change"), self.redo)
 		self.model.seq.make_redo_sensitive(self.toolbar.get_children()[-1])
 
 		# explorer mode widgets
@@ -882,8 +852,7 @@ class MainWindow:
 		self.weirdness.set_size_request(100, 20)
 		self.weirdness.set_property("value-pos",gtk.POS_RIGHT)
 		
-		self.weirdness.set_update_policy(
-			gtk.UPDATE_DISCONTINUOUS)
+		self.weirdness.set_update_policy(gtk.UPDATE_DISCONTINUOUS)
 
 		self.weirdbox = gtk.VBox()
 		shapebox = gtk.HBox(False,2)
@@ -893,13 +862,8 @@ class MainWindow:
 
 		self.weirdbox.pack_start(shapebox)
 		
-		self.toolbar.add_widget(
-			self.weirdbox,
-			_("Weirdness"),
-			_("How different to make the random mutant fractals"))
-
-		self.color_weirdness_adjustment = gtk.Adjustment(
-			20.0, 0.0, 100.0, 5.0, 5.0, 0.0)
+		self.toolbar.add_widget(self.weirdbox, _("Weirdness"), _("How different to make the random mutant fractals"))
+		self.color_weirdness_adjustment = gtk.Adjustment(20.0, 0.0, 100.0, 5.0, 5.0, 0.0)
 
 		self.color_weirdness = gtk.HScale(self.color_weirdness_adjustment)
 		self.color_weirdness.set_size_request(100, 20)
@@ -911,8 +875,7 @@ class MainWindow:
 		colorbox.pack_start(self.color_weirdness)
 		self.weirdbox.pack_start(colorbox)
 		
-		self.color_weirdness.set_update_policy(
-			gtk.UPDATE_DISCONTINUOUS)
+		self.color_weirdness.set_update_policy(gtk.UPDATE_DISCONTINUOUS)
 
 		def on_weirdness_changed(adjustment):
 			self.update_subfracts()
@@ -1057,13 +1020,8 @@ class MainWindow:
 		
 	def add_fourway(self, name, tip, axis, is4dsensitive):
 		my_fourway = fourway.T(name)
-		self.toolbar.add_widget(
-			my_fourway.widget,
-			tip,
-			None)
-
+		self.toolbar.add_widget(my_fourway.widget, tip, None)
 		my_fourway.axis = axis
-		
 		my_fourway.connect('value-slightly-changed', self.on_drag_fourway)
 		my_fourway.connect('value-changed', self.on_release_fourway)
 
