@@ -137,8 +137,7 @@ class SaveConfirmationAlert(ConfirmationAlert):
 		if time_period==-1:
 			text = _("If you don't save, changes will be discarded.")
 		else:
-			text = (_("If you don't save, changes from the past %s " + \
-				   "will be discarded.")) % _periodText(time_period)
+			text = (_("If you don't save, changes from the past %s will be discarded.")) % _periodText(time_period)
 
 		kwds.setdefault("primary",_('Save changes to document "%s" before closing?') % document_name)
 		kwds.setdefault("secondary", text)
