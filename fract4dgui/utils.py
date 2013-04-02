@@ -75,6 +75,23 @@ else:
 	def input_add(fd, cb):
 		return fract4dc.io_add_watch(fd, gobject.IO_IN | gobject.IO_HUP, cb)
 
+def which(program):
+	def is_exe(fpath):
+		return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
+
+	fpath, fname = os.path.split(program)
+	if fpath:
+		if is_exe(program):
+			return program
+	else:
+		for path in os.environ["PATH"].split(os.pathsep):
+			path = path.strip('"')
+			exe_file = os.path.join(path, program)
+			if is_exe(exe_file):
+				return exe_file
+
+	return None
+
 def find_in_path(exe):
 	# find an executable along PATH env var
 	pathstring = os.environ["PATH"]
