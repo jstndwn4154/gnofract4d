@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnofract 4d\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-02 22:04+0200\n"
-"PO-Revision-Date: 2013-04-02 22:07+0100\n"
+"POT-Creation-Date: 2013-04-02 22:26+0200\n"
+"PO-Revision-Date: 2013-04-02 22:28+0100\n"
 "Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: German\n"
 "Language: de\n"
@@ -58,16 +58,16 @@ msgid "If you don't save, changes will be discarded."
 msgstr "Nicht gespeicherte Änderungen werden verworfen."
 
 #: fract4dgui/hig.py:140
-#, fuzzy, python-format
-msgid "If you don't save, changes from the past %s "
-msgstr "Nicht gespeicherte Änderungen sind unwiederbringlich verloren."
+#, python-format
+msgid "If you don't save, changes from the past %s will be discarded."
+msgstr "Nicht gespeicherte Änderungen der letzten %s werden verworfen."
 
-#: fract4dgui/hig.py:143
+#: fract4dgui/hig.py:142
 #, python-format
 msgid "Save changes to document \"%s\" before closing?"
 msgstr "Änderungen am Dokument »%s« vor dem Schließen speichern?"
 
-#: fract4dgui/hig.py:146
+#: fract4dgui/hig.py:145
 msgid "_Close without Saving"
 msgstr "Schließen _ohne zu speichern"
 
@@ -311,7 +311,7 @@ msgid "_View My Online Fractals"
 msgstr "Meine Online-Fraktale _anzeigen"
 
 #: fract4dgui/main_window.py:615
-msgid "View fractals I've uploaded (if any"
+msgid "View fractals I've uploaded (if any)"
 msgstr "Von mir hochgeladene Fraktale anzeigen (falls vorhanden)"
 
 #: fract4dgui/main_window.py:616
@@ -871,9 +871,8 @@ msgid "Auto _Tolerance"
 msgstr "Auto-_Toleranz"
 
 #: fract4dgui/preferences.py:420
-#, fuzzy
 msgid "Adjust periodicity tolerance automatically"
-msgstr "Zulässige absolute Toleranz"
+msgstr "Toleranz der Periodizität automatisch anpassen"
 
 #: fract4dgui/preferences.py:453
 msgid "_Image"
@@ -1031,9 +1030,8 @@ msgid "_Tolerance"
 msgstr "_Toleranz"
 
 #: fract4dgui/settings.py:389
-#, fuzzy
 msgid "Flip Y Axis"
-msgstr "Ausrichtungsachse"
+msgstr "Y-Achse umdrehen"
 
 #: fract4dgui/settings.py:392
 msgid "If set, Y axis increases down the screen, otherwise up the screen"
@@ -1496,3 +1494,7 @@ msgstr ""
 #: fract4dgui/gtkfractal.py:878
 msgid "Error compiling fractal:"
 msgstr "Fehler beim Kompilieren des Fraktals:"
+
+#, fuzzy
+#~ msgid "If you don't save, changes from the past %s "
+#~ msgstr "Nicht gespeicherte Änderungen sind unwiederbringlich verloren."

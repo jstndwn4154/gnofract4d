@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-02 22:04+0200\n"
+"POT-Creation-Date: 2013-04-02 22:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -59,15 +59,15 @@ msgstr ""
 
 #: fract4dgui/hig.py:140
 #, python-format
-msgid "If you don't save, changes from the past %s "
+msgid "If you don't save, changes from the past %s will be discarded."
 msgstr ""
 
-#: fract4dgui/hig.py:143
+#: fract4dgui/hig.py:142
 #, python-format
 msgid "Save changes to document \"%s\" before closing?"
 msgstr ""
 
-#: fract4dgui/hig.py:146
+#: fract4dgui/hig.py:145
 msgid "_Close without Saving"
 msgstr ""
 
@@ -309,7 +309,7 @@ msgid "_View My Online Fractals"
 msgstr ""
 
 #: fract4dgui/main_window.py:615
-msgid "View fractals I've uploaded (if any"
+msgid "View fractals I've uploaded (if any)"
 msgstr ""
 
 #: fract4dgui/main_window.py:616
