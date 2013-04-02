@@ -1,9 +1,21 @@
-gnofract4d (4.0-1ubuntu1) karmic; urgency=low
+gnofract4d (4.0) lucid; urgency=low
 
   * New version of program
 
- -- Tim Whidbey <catenary@users.sourceforge.net>  Sun, 17 May 2009 14:23:00 +0800
+ -- Rachel Mant <dx-mon@users.sourceforge.net>  Tue, 2 Apr 2013 xx:xx:xx +0100
 
+gnofract4d (3.14.1) lucid; urgency=low
+
+  * Windows vs Mac fixes
+  * Debian build, not Ubuntu (more generic .deb, hopefully) hence removal of ubuntu tag
+
+ -- Rachel Mant <dx-mon@users.sourceforge.net> Sun, 24 Feb 2013 03:29:00 +0000
+
+gnofract4d (3.14-1ubuntu1) lucid; urgency=low
+
+  * New version of program
+
+ -- Rachel Mant <dx-mon@users.sourceforge.net> Wed, 18 May 2011 21:00:00 +0100
 
 gnofract4d (3.13-1ubuntu1) gutsy; urgency=low
 
