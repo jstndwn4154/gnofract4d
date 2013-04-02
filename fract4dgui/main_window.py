@@ -1127,24 +1127,40 @@ class MainWindow:
 		d.run()
 		d.destroy()
 
-	def send_to(self,*args):
+	def send_to(self, *args):
 		"""Launch an email editor with current image attached."""
-		mailer = preferences.userPrefs.get("helpers","mailer")
+		mailer = preferences.userPrefs.get("helpers", "mailer")
+
+		if (utils.which(mailer) == None):
+			d = hig.ErrorAlert(
+				primary=_("Error launching email client"),
+				secondary=_("Please set your email client in the preferences dialog.\n"),
+				parent=self.window
+			)
+			d.run()
+			d.destroy()
+			return
 
 		if False:
 			# to save an image and attach it
 			# add &attach=%s to url
-			image_name = os.path.join(
-				"/tmp",
-				os.path.basename(self.default_save_filename(".png")))
+			image_name = os.path.join("/tmp", os.path.basename(self.default_save_filename(".png")))
 			self.save_image_file(image_name)
-			
-		subject = os.path.basename(self.display_filename())
-		url= '"mailto:gnofract4d-users@lists.sourceforge.net?subject=%s&body=%s"' % \
-			 (urllib.quote(subject),
-			  urllib.quote(self.f.serialize()))
 
-		os.system("%s &" % (mailer % url))
+		subject = os.path.basename(self.display_filename())
+		url= '"mailto:gnofract4d-users@lists.sourceforge.net?subject=%s&body=%s"' % (urllib.quote(subject), urllib.quote(self.f.serialize()))
+		cmd = mailer % (url + ' &')
+
+		try:
+			os.system(cmd)
+		except Exception, err:
+			d = hig.ErrorAlert(
+				primary=_("Error launching email client"),
+				secondary=_("Please set your email client in the preferences dialog.\n") + str(err),
+				parent=self.window
+			)
+			d.run()
+			d.destroy()
 
 	def upload(self,*args):
 		"""Upload the current image to Flickr.com."""
