@@ -612,7 +612,7 @@ class MainWindow:
 			('ShareUploadAction', None, _('_Upload to Flickr...'),
 			 '<control>U', _('Upload current image to Flickr'), self.upload),
 			('ShareViewMyFractalsAction', None, _('_View My Online Fractals'),
-			 None, _('View fractals I\'ve uploaded (if any'), self.view_my_fractals),
+			 None, _('View fractals I\'ve uploaded (if any)'), self.view_my_fractals),
 			('ShareViewGroupFractalsAction', None, _('View _Group Fractals'),
 			 None, _('View fractals uploaded by everyone'), self.view_group_fractals),
 
