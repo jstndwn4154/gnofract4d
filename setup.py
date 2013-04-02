@@ -218,8 +218,7 @@ if 'win' == sys.platform[:3]:
 	osdep = [ '/DWIN32', '/DWINDOWS', '/D_USE_MATH_DEFINES', '/D_CRT_SECURE_NO_WARNINGS', '/EHsc', '/Ox' ]
 	extra_include = [ 'P:/x86/GnuWin32/include' ]
 	includes = os.environ['GTK+_Include'].split(";")
-	for i in includes:
-		extra_include += [ i ]
+	extra_include += [i for i in includes]
 	extra_source = [ 'fract4d/c/win32func.cpp', 'fract4d/c/fract4d_stdlib_exports.cpp' ]
 	if "64 bit" in sys.version:
 		extra_link = [ 'P:/x86_64/GTK+/lib', 'P:/x86_64/GnuWin64/lib' ]
