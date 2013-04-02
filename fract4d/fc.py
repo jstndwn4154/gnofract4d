@@ -149,7 +149,7 @@ class Compiler:
         self.cache = cache.T()
         self.cache_dir = os.path.expanduser("~/.gnofract4d-cache/")
         self.init_cache()
-        if 'win' not in sys.platform:
+        if 'win' != sys.platform[:3]:
             self.compiler_name = "gcc"
             self.flags = "-fPIC -DPIC -g -O3 -shared"
             self.output_flag = "-o "
