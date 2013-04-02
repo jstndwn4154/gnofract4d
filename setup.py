@@ -212,7 +212,7 @@ module_fract4dgmp = Extension(
 	undef_macros = [ 'NDEBUG']	
 	)
 
-if "win" == sys.platform[:3]:
+if 'win' == sys.platform[:3]:
 	warnings = '/W3'
 	libs = [ 'pthreadVC2', 'libdl', 'ws2_32' ]
 	osdep = [ '/DWIN32', '/DWINDOWS', '/D_USE_MATH_DEFINES', '/D_CRT_SECURE_NO_WARNINGS', '/EHsc', '/Ox' ]
