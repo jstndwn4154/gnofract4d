@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-02 22:26+0200\n"
+"POT-Creation-Date: 2013-04-03 21:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -862,6 +862,18 @@ msgstr ""
 msgid "Adjust periodicity tolerance automatically"
 msgstr ""
 
+#: fract4dgui/preferences.py:436
+msgid "None"
+msgstr ""
+
+#: fract4dgui/preferences.py:436
+msgid "Fast"
+msgstr ""
+
+#: fract4dgui/preferences.py:436
+msgid "Best"
+msgstr ""
+
 #: fract4dgui/preferences.py:453
 msgid "_Image"
 msgstr ""
@@ -1046,12 +1058,16 @@ msgstr ""
 msgid "Apply Formula Changes"
 msgstr ""
 
-#: fract4dgui/settings.py:605 fract4dgui/settings.py:610
-msgid "Formula"
+#: fract4dgui/settings.py:605
+msgid "_Formula"
 msgstr ""
 
 #: fract4dgui/settings.py:606
 msgid "Browse available fractal functions"
+msgstr ""
+
+#: fract4dgui/settings.py:610
+msgid "Formula"
 msgstr ""
 
 #: fract4dgui/settings.py:618 fract4dgui/settings.py:631
@@ -1063,11 +1079,11 @@ msgid "Browse available coloring functions"
 msgstr ""
 
 #: fract4dgui/settings.py:623
-msgid "Outer"
+msgid "_Outer"
 msgstr ""
 
 #: fract4dgui/settings.py:636
-msgid "Inner"
+msgid "_Inner"
 msgstr ""
 
 #: fract4dgui/director_prefs.py:13

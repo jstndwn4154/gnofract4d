@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnofract 4d\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-02 22:26+0200\n"
-"PO-Revision-Date: 2013-04-02 22:28+0100\n"
+"POT-Creation-Date: 2013-04-03 21:14+0200\n"
+"PO-Revision-Date: 2013-04-03 21:25+0100\n"
 "Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: German\n"
 "Language: de\n"
@@ -86,7 +86,7 @@ msgstr "E-_Mail senden"
 #: fract4dgui/icons.py:42 fract4dgui/main_window.py:629
 #, fuzzy
 msgid "_Painter"
-msgstr "Maler-&Werkzeuge"
+msgstr "_Malwerkzeug"
 
 #: fract4dgui/icons.py:44
 msgid "_Report Bug"
@@ -121,9 +121,8 @@ msgid "Paused"
 msgstr "Pausiert"
 
 #: fract4dgui/main_window.py:116
-#, fuzzy
 msgid "Reducing Periodicity Tolerance"
-msgstr "Zulässige absolute Toleranz"
+msgstr "Toleranz der Periodizität reduzieren"
 
 #: fract4dgui/main_window.py:127
 msgid "Width:"
@@ -500,7 +499,7 @@ msgstr "Verzerren"
 
 #: fract4dgui/main_window.py:816
 msgid "Mutate the image by moving along the other 2 axes"
-msgstr ""
+msgstr "Das Bild durch Verschieben entlang der anderen zwei Achsen verändern"
 
 #: fract4dgui/main_window.py:818
 msgid "Which parameter is being warped"
@@ -612,9 +611,8 @@ msgid "Autozoom"
 msgstr "Auto-Vergrößerung"
 
 #: fract4dgui/autozoom.py:27
-#, fuzzy
 msgid "Start _Zooming"
-msgstr "patch-start"
+msgstr "_Vergrößerung beginnen"
 
 #: fract4dgui/autozoom.py:28
 msgid "Zoom into interesting areas automatically"
@@ -644,7 +642,7 @@ msgstr "Fehler während der Erzeugung der AVI-Datei: %s"
 #: fract4dgui/painter.py:21
 #, fuzzy
 msgid "Painter"
-msgstr "Maler-&Werkzeuge"
+msgstr "_Malwerkzeug"
 
 #: fract4dgui/painter.py:28
 #, fuzzy
@@ -672,14 +670,12 @@ msgid "Fractal Function"
 msgstr "Fractal-Funktion"
 
 #: fract4dgui/browser.py:227
-#, fuzzy
 msgid "Outer Coloring Function"
-msgstr "Schlüsselwort einer eingebauten Funktion"
+msgstr "Funktion zur äußeren Färbung"
 
 #: fract4dgui/browser.py:228
-#, fuzzy
 msgid "Inner Coloring Function"
-msgstr "Schlüsselwort einer eingebauten Funktion"
+msgstr "Funktion zur inneren Färbung"
 
 #: fract4dgui/browser.py:229
 msgid "Transform Function"
@@ -691,7 +687,7 @@ msgstr "Verlauf"
 
 #: fract4dgui/browser.py:235
 msgid "Which formula of the current fractal to change"
-msgstr ""
+msgstr "ZU ändernde Formel des aktuellen Fraktals"
 
 #: fract4dgui/browser.py:241
 msgid "Function _Type to Modify : "
@@ -756,7 +752,7 @@ msgstr "Der temporäre Ordner %s enthält bereits mindestens ein Bild"
 
 #: fract4dgui/PNGGen.py:92
 msgid "Use them to speed up generation?"
-msgstr ""
+msgstr "Diese verwenden, um die Erzeugung zu beschleunigen?"
 
 #: fract4dgui/preferences.py:79
 msgid "Gnofract 4D Preferences"
@@ -873,6 +869,18 @@ msgstr "Auto-_Toleranz"
 #: fract4dgui/preferences.py:420
 msgid "Adjust periodicity tolerance automatically"
 msgstr "Toleranz der Periodizität automatisch anpassen"
+
+#: fract4dgui/preferences.py:436
+msgid "None"
+msgstr "Keine"
+
+#: fract4dgui/preferences.py:436
+msgid "Fast"
+msgstr "Schnell"
+
+#: fract4dgui/preferences.py:436
+msgid "Best"
+msgstr "Bestmöglich"
 
 #: fract4dgui/preferences.py:453
 msgid "_Image"
@@ -1036,6 +1044,7 @@ msgstr "Y-Achse umdrehen"
 #: fract4dgui/settings.py:392
 msgid "If set, Y axis increases down the screen, otherwise up the screen"
 msgstr ""
+"Falls gesetzt, wird die Y-Achse nach unten verlängert, ansonsten nach oben"
 
 #: fract4dgui/settings.py:407
 msgid "Periodicity Checking"
@@ -1061,13 +1070,17 @@ msgstr "Fehler in Formel"
 msgid "Apply Formula Changes"
 msgstr "Formeländerungen anwenden"
 
-#: fract4dgui/settings.py:605 fract4dgui/settings.py:610
-msgid "Formula"
-msgstr "Formel"
+#: fract4dgui/settings.py:605
+msgid "_Formula"
+msgstr "_Formel"
 
 #: fract4dgui/settings.py:606
 msgid "Browse available fractal functions"
 msgstr "Durchsuchen der verfügbaren Fraktalfunktionen"
+
+#: fract4dgui/settings.py:610
+msgid "Formula"
+msgstr "Formel"
 
 #: fract4dgui/settings.py:618 fract4dgui/settings.py:631
 msgid "Coloring Method"
@@ -1078,16 +1091,12 @@ msgid "Browse available coloring functions"
 msgstr "Durchsuchen der verfügbaren Färbungsmethoden"
 
 #: fract4dgui/settings.py:623
-#, fuzzy
-msgid "Outer"
-msgstr ""
-"Außen-\n"
-"bereich"
+msgid "_Outer"
+msgstr "_Außen"
 
 #: fract4dgui/settings.py:636
-#, fuzzy
-msgid "Inner"
-msgstr "I_nnere Legitimierung:"
+msgid "_Inner"
+msgstr "_Innen"
 
 #: fract4dgui/director_prefs.py:13
 msgid "Choose directory..."
@@ -1393,7 +1402,6 @@ msgid "_Include parameters in description"
 msgstr "Parameter in Beschreibung e_inschließen"
 
 #: fract4dgui/flickr_assistant.py:115
-#, fuzzy
 msgid "<None>"
 msgstr "<Nicht gesetzt>"
 
@@ -1437,6 +1445,17 @@ msgid ""
 "instructions on-screen. When done, close the browser window and click Next.\n"
 "\n"
 msgstr ""
+"Flickr ist ein Online-Bilderdienst. Wenn Sie wünschen, kann Gnofract4d Ihre "
+"Fraktalgrafiken zu Flickr übertragen, so dass andere sie sehen können.\n"
+"\n"
+"Um Bilder zu Flickr hochladen zu können, benötigen Sie zunächst ein Flickr- "
+"oder Yahoo-Benutzerkonto und müssen dann Gnofract4d legitimieren, Bilder in "
+"Ihrem Namen posten zu können. Dies müssen Sie nur einmal vornehmen.\n"
+"\n"
+"Zur Einrichtung klicken Sie auf den folgenden Verweis und folgen den "
+"angezeigten Anweisungen. Sobald Sie fertig sind, schließen Sie das "
+"Browserfenster und klicken Sie auf »Weiter«.\n"
+"\n"
 
 #: fract4dgui/flickr_assistant.py:291
 msgid "Flickr Integration Setup"
@@ -1495,6 +1514,3 @@ msgstr ""
 msgid "Error compiling fractal:"
 msgstr "Fehler beim Kompilieren des Fraktals:"
 
-#, fuzzy
-#~ msgid "If you don't save, changes from the past %s "
-#~ msgstr "Nicht gespeicherte Änderungen sind unwiederbringlich verloren."
