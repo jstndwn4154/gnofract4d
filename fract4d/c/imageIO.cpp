@@ -111,10 +111,7 @@ bool tga_writer::save_footer()
 }
 
 #ifdef PNG_ENABLED
-extern "C"
-{
-	#include "png.h"
-}
+#include "png.h"
 
 // Backwards compatability defines coppied from an older png.h
 #ifndef int_p_NULL
