@@ -383,7 +383,7 @@ msgstr "Referenz für Funktionen und Objekte im Formel-Compiler"
 
 #: fract4dgui/main_window.py:640
 msgid "_Report a Bug"
-msgstr "Einen Fehle_r melden"
+msgstr "Einen Fehler _melden"
 
 #: fract4dgui/main_window.py:641
 msgid "Report a bug you've found"
