@@ -121,10 +121,10 @@ class Hidden(gobject.GObject):
 		utils.input_add(fd,cb)
 
 	def error(self,msg,err):
-		print "Error: %s %s" % (msg,err)
+		print _("Error: %s %s") % (msg,err)
 		
 	def warn(self,msg):
-		print "Warning: ", msg
+		print _("Warning: "), msg
 
 	def update_formula(self):
 		if self.f != None:
@@ -176,7 +176,7 @@ class Hidden(gobject.GObject):
 		self.msgbuf = ""
 		bytes = self.io_subsys.read(fd,size)
 		if len(bytes) < size:
-			print "not enough bytes, got %d instead of %d" % (len(bytes),size)
+			print _("not enough bytes, got %d instead of %d") % (len(bytes),size)
 			return True
 
 		m = messages.parse(t,bytes)
@@ -209,7 +209,7 @@ class Hidden(gobject.GObject):
 		elif t == fract4dc.MESSAGE_TYPE_STATS:
 			if not self.skip_updates: self.stats_changed(m)
 		else:
-			print "Unknown message from fractal thread; %s" % list(bytes)
+			print _("Unknown message from fractal thread; %s") % list(bytes)
 
 		if utils.threads_enabled:
 			gtk.gdk.threads_leave()

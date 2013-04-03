@@ -26,7 +26,7 @@ if build_version and build_python and sys.version[:3] != build_version:
 	print "running other Python version %s with args: %s" % (build_python,args)
 	os.execv(build_python, args)
 
-from buildtools import my_bdist_rpm, my_build, my_build_ext, my_install_lib, my_install_egg_info
+from buildtools import my_bdist_rpm, my_build, my_build_ext, my_install_lib, my_install_egg_info, my_build_mo
 
 # Extensions need to link against appropriate libs
 # We use pkg-config to find the appropriate set of includes and libs
@@ -278,6 +278,14 @@ if have_gmp:
 def get_files(dir,ext):
 	return [ os.path.join(dir,x) for x in os.listdir(dir) if x.endswith(ext)] 
 
+mo = []
+for po in os.listdir('po'):
+	if (po.endswith('.po')):
+		lang = po[:-3]
+		langDir = os.path.join('share', 'locale', lang, 'LC_MESSAGES')
+		langFile = os.path.join('build', 'locale', lang, 'LC_MESSAGES', 'gnofract4d.mo')
+		mo.append((langDir, [langFile]))
+
 setup (name = 'gnofract4d',
 	   version = gnofract4d_version,
 	   description = 'A program to draw fractals',
@@ -334,13 +342,14 @@ and includes a Fractint-compatible parser for your own fractal formulas.''',
 		   # doc files
 		   ('share/doc/gnofract4d',
 			['COPYING', 'README']),
-		   ],
+		   ] + mo,
 	   cmdclass={
 		   "my_bdist_rpm": my_bdist_rpm.my_bdist_rpm,
 		   "build" : my_build.my_build,
 		   "my_build_ext" : my_build_ext.my_build_ext,
 		   "install_lib" : my_install_lib.my_install_lib,
-		   "install_egg_info" : my_install_egg_info.my_install_egg_info
+		   "install_egg_info" : my_install_egg_info.my_install_egg_info,
+		   "my_build_mo" : my_build_mo.my_build_mo
 		   }
 	   )
 

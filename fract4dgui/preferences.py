@@ -112,7 +112,7 @@ class PrefsDialog(dialog.T):
 
 	def create_width_entry(self):
 		entry = gtk.Entry()
-		entry.set_tooltip_text("The image's width in pixels")
+		entry.set_tooltip_text(_("The image's width in pixels"))
 		entry.set_activates_default(True)
 		
 		def set_entry(*args):
@@ -145,7 +145,7 @@ class PrefsDialog(dialog.T):
 
 	def create_height_entry(self):
 		entry = gtk.Entry()
-		entry.set_tooltip_text("The image's height in pixels")
+		entry.set_tooltip_text(_("The image's height in pixels"))
 		entry.set_activates_default(True)
 		
 		def set_entry(*args):
@@ -399,8 +399,8 @@ class PrefsDialog(dialog.T):
 		self.update_id()
 		
 	def create_auto_deepen_widget(self):
-		widget = gtk.CheckButton("Auto _Deepen")
-		widget.set_tooltip_text("Adjust number of iterations automatically")
+		widget = gtk.CheckButton(_("Auto _Deepen"))
+		widget.set_tooltip_text(_("Adjust number of iterations automatically"))
 		widget.set_use_underline(True)
 		
 		def set_widget(*args):
@@ -416,8 +416,8 @@ class PrefsDialog(dialog.T):
 		return widget
 
 	def create_auto_tolerance_widget(self):
-		widget = gtk.CheckButton("Auto _Tolerance")
-		widget.set_tooltip_text("Adjust periodicity tolerance automatically")
+		widget = gtk.CheckButton(_("Auto _Tolerance"))
+		widget.set_tooltip_text(_("Adjust periodicity tolerance automatically"))
 		widget.set_use_underline(True)
 		
 		def set_widget(*args):
@@ -433,7 +433,7 @@ class PrefsDialog(dialog.T):
 		return widget
 
 	def create_antialias_menu(self):
-		optMenu = utils.create_option_menu(["None", "Fast", "Best"])
+		optMenu = utils.create_option_menu([_("None"), _("Fast"), _("Best")])
 
 		def set_widget(*args):
 			utils.set_selected(optMenu, self.prefs.getint("display","antialias"))
@@ -450,14 +450,14 @@ class PrefsDialog(dialog.T):
 	
 	def create_image_options_page(self):
 		table = gtk.Table(5,2,False)
-		label = gtk.Label("_Image")
+		label = gtk.Label(_("_Image"))
 		label.set_use_underline(True)
 		self.notebook.append_page(table,label)
 
 		wentry = self.create_width_entry()
 		table.attach(wentry,1,2,0,1,gtk.EXPAND | gtk.FILL, 0, 2, 2)
 
-		wlabel = gtk.Label("_Width :")
+		wlabel = gtk.Label(_("_Width :"))
 		wlabel.set_mnemonic_widget(wentry)
 		wlabel.set_use_underline(True)
 		table.attach(wlabel,0,1,0,1,0,0,2,2)
@@ -465,13 +465,13 @@ class PrefsDialog(dialog.T):
 		hentry = self.create_height_entry()
 		table.attach(hentry,1,2,1,2,gtk.EXPAND | gtk.FILL, 0, 2, 2)
 
-		hlabel = gtk.Label("_Height :")
+		hlabel = gtk.Label(_("_Height :"))
 		hlabel.set_mnemonic_widget(hentry)
 		hlabel.set_use_underline(True)
 		table.attach(hlabel,0,1,1,2,0,0,2,2)
 
-		self.fix_ratio = gtk.CheckButton("Maintain Aspect _Ratio")
-		self.fix_ratio.set_tooltip_text("Keep the image rectangle the same shape when changing its size")
+		self.fix_ratio = gtk.CheckButton(_("Maintain Aspect _Ratio"))
+		self.fix_ratio.set_tooltip_text(_("Keep the image rectangle the same shape when changing its size"))
 		self.fix_ratio.set_use_underline(True)
 		table.attach(self.fix_ratio,0,2,2,3,gtk.EXPAND | gtk.FILL, 0, 2, 2)
 		self.fix_ratio.set_active(True)
@@ -488,7 +488,7 @@ class PrefsDialog(dialog.T):
 		optMenu = self.create_antialias_menu()
 		table.attach(optMenu,1,2,5,6,gtk.EXPAND | gtk.FILL, 0, 2, 2)
 
-		aalabel = gtk.Label("_Antialiasing : ")
+		aalabel = gtk.Label(_("_Antialiasing : "))
 		aalabel.set_use_underline(True)
 		aalabel.set_mnemonic_widget(optMenu)
 		table.attach(aalabel,0,1,5,6,0,0,2,2)

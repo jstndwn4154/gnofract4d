@@ -612,7 +612,7 @@ class MainWindow:
 			('ShareUploadAction', None, _('_Upload to Flickr...'),
 			 '<control>U', _('Upload current image to Flickr'), self.upload),
 			('ShareViewMyFractalsAction', None, _('_View My Online Fractals'),
-			 None, _('View fractals I\'ve uploaded (if any'), self.view_my_fractals),
+			 None, _('View fractals I\'ve uploaded (if any)'), self.view_my_fractals),
 			('ShareViewGroupFractalsAction', None, _('View _Group Fractals'),
 			 None, _('View fractals uploaded by everyone'), self.view_group_fractals),
 
@@ -689,9 +689,9 @@ class MainWindow:
 		self.vbox.pack_start(self.menubar, False, True, 0)
 		
 		# this could be done with an actiongroup, but since it already works...
-		undo = self.manager.get_widget(_("/MenuBar/EditMenu/EditUndo"))
+		undo = self.manager.get_widget("/MenuBar/EditMenu/EditUndo")
 		self.model.seq.make_undo_sensitive(undo)
-		redo = self.manager.get_widget(_("/MenuBar/EditMenu/EditRedo"))
+		redo = self.manager.get_widget("/MenuBar/EditMenu/EditRedo")
 		self.model.seq.make_redo_sensitive(redo)
 
 		self.recent_menuitems = [

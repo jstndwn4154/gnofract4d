@@ -6,13 +6,9 @@
 import sys
 import os
 
-# gettext
-import gettext
-os.environ.setdefault('LANG', 'en')
-if os.path.isdir('po'):
-    gettext.install('gnofract4d','po')
-else:
-    gettext.install('gnofract4d')
+# This runs our internationalisation support code
+from fract4dgui import i18n
+i18n.i18n()
 
 # Threads are optional because RedHat seem to compile pygtk
 # without thread support. Grrr.
