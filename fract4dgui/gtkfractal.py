@@ -734,13 +734,13 @@ class T(Hidden):
 		if self.parent:
 			self.parent.show_error_message(msg, err)
 		else:
-			print "Error: %s : %s" % (msg,err)
+			print _("Error: %s : %s") % (msg,err)
 		
 	def warn(self,msg):
 		if self.parent:
 			self.parent.show_warning(msg)
 		else:
-			print "Warning: ", msg
+			print _("Warning: "), msg
 
 	def add_formula_function(self,table,i,name,param,form):
 		label = gtk.Label(self.param_display_name(name,param))

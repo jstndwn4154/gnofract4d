@@ -85,11 +85,11 @@ class FCTGeneration:
 				if len(ret)==11:
 					self.values.append(ret)
 				elif len(ret)>1:
-					self.show_error("Error finding %s values in file: %s" % (ret[0],ret[1]))
+					self.show_error(_("Error finding %s values in file: %s") % (ret[0],ret[1]))
 					yield False
 					return
 				else:
-					self.show_error("Error reading .fct file")
+					self.show_error(_("Error reading .fct file"))
 					yield False
 					return
 				self.durations.append(self.dir_bean.get_keyframe_duration(i))
