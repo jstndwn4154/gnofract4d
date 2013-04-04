@@ -85,7 +85,7 @@ if 'win' == sys.platform[:3]:
 		if "64 bit" in sys.version:
 			png_libs = scan_for_file('libpng16.lib', os.path.join('x86_64','GnuWin64'), True)
 		else:
-			png_libs = scan_for_file('libpng.lib', os.path.join('x86','GnuWin32'), True)
+			png_libs = scan_for_file('libpng16.lib', os.path.join('x86','GnuWin32'), True)
 		if png_libs != []:
 			cache_file.write("".join(png_libs) + '\n')
 		jpg_flags = scan_for_file('jpeglib.h', os.path.join('x86','GnuWin32'))
