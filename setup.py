@@ -85,7 +85,7 @@ if 'win' == sys.platform[:3]:
 		if "64 bit" in sys.version:
 			png_libs = scan_for_file('libpng16.lib', os.path.join('x86_64','GnuWin64'), True)
 		else:
-			png_libs = scan_for_file('libpng.lib', os.path.join('x86','GnuWin32'), True)
+			png_libs = scan_for_file('libpng16.lib', os.path.join('x86','GnuWin32'), True)
 		if png_libs != []:
 			cache_file.write("".join(png_libs) + '\n')
 		jpg_flags = scan_for_file('jpeglib.h', os.path.join('x86','GnuWin32'))
@@ -185,15 +185,16 @@ module_gmp = Extension(
 	'fract4d/gmpy/gmpy.c'
 	],
 	libraries = ['gmp']
-	)
+)
 
-defines = [ ('_REENTRANT',1),
-			('THREADS',1),
-			#('STATIC_CALC',1),
-			#('NO_CALC', 1),  # set this to not calculate the fractal
-			#('DEBUG_CREATION',1), # debug spew for allocation of objects
-			#('DEBUG_ALLOCATION',1), # debug spew for array handling
-			]
+defines = [
+	('_REENTRANT', 1),
+	('THREADS', 1),
+	#('STATIC_CALC',1),
+	#('NO_CALC', 1),  # set this to not calculate the fractal
+	#('DEBUG_CREATION',1), # debug spew for allocation of objects
+	#('DEBUG_ALLOCATION',1), # debug spew for array handling
+]
 
 module_fract4dgmp = Extension(
 	'fract4d.fract4dcgmp',
@@ -208,9 +209,9 @@ module_fract4dgmp = Extension(
 	'-Wall', '-Wno-strict-prototypes'
 	] + png_flags,
 	extra_link_args = png_libs, 
-	define_macros = defines + [('USE_GMP',1)] + extra_macros,
-	undef_macros = [ 'NDEBUG']	
-	)
+	define_macros = defines + [ ('USE_GMP', 1) ] + extra_macros,
+	undef_macros = [ 'NDEBUG' ]
+)
 
 if 'win' == sys.platform[:3]:
 	warnings = '/W3'
@@ -219,7 +220,8 @@ if 'win' == sys.platform[:3]:
 	extra_include = [ 'P:/x86/GnuWin32/include' ]
 	includes = os.environ['GTK+_Include'].split(";")
 	extra_include += [i for i in includes]
-	extra_source = [ 'fract4d/c/win32func.cpp', 'fract4d/c/fract4d_stdlib_exports.cpp' ]
+	extra_source = [ 'fract4d/c/win32func.cpp' ]
+	extra_lib_source = [ 'fract4d/c/fract4d_stdlib_exports.cpp' ]
 	if "64 bit" in sys.version:
 		extra_link = [ 'P:/x86_64/GTK+/lib', 'P:/x86_64/GnuWin64/lib' ]
 	else:
@@ -231,6 +233,7 @@ else:
 	osdep = []
 	include_dir = []
 	extra_source = []
+	extra_lib_source = []
 	extra_link = []
 	extra_include = []
 	icon = ('share/pixmaps', ['pixmaps/gnofract4d-logo.png'])
@@ -252,7 +255,7 @@ module_fract4dc = Extension(
 	extra_link_args = png_libs,
 	define_macros = defines + extra_macros,
 	#undef_macros = [ 'NDEBUG'],
-	)
+)
 
 module_cmap = Extension(
 	'fract4d.fract4d_stdlib',
@@ -260,15 +263,15 @@ module_cmap = Extension(
 	'fract4d/c/cmap.cpp',
 	'fract4d/c/image.cpp',
 	'fract4d/c/fract_stdlib.cpp'
-	] + extra_source,
+	] + extra_source + extra_lib_source,
 	include_dirs = [
 	'fract4d/c'
 	] + extra_include,
 	extra_compile_args = osdep,
 	libraries = libs,
 	library_dirs = extra_link,
-	define_macros = [ ('_REENTRANT', 1)]
-	)
+	define_macros = [ ('_REENTRANT', 1), ('STDLIB_EXPS', 1) ]
+)
 
 modules = [module_fract4dc, module_cmap]
 if have_gmp:
