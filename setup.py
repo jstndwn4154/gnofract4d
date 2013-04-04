@@ -185,15 +185,16 @@ module_gmp = Extension(
 	'fract4d/gmpy/gmpy.c'
 	],
 	libraries = ['gmp']
-	)
+)
 
-defines = [ ('_REENTRANT',1),
-			('THREADS',1),
-			#('STATIC_CALC',1),
-			#('NO_CALC', 1),  # set this to not calculate the fractal
-			#('DEBUG_CREATION',1), # debug spew for allocation of objects
-			#('DEBUG_ALLOCATION',1), # debug spew for array handling
-			]
+defines = [
+	('_REENTRANT', 1),
+	('THREADS', 1),
+	#('STATIC_CALC',1),
+	#('NO_CALC', 1),  # set this to not calculate the fractal
+	#('DEBUG_CREATION',1), # debug spew for allocation of objects
+	#('DEBUG_ALLOCATION',1), # debug spew for array handling
+]
 
 module_fract4dgmp = Extension(
 	'fract4d.fract4dcgmp',
@@ -208,9 +209,9 @@ module_fract4dgmp = Extension(
 	'-Wall', '-Wno-strict-prototypes'
 	] + png_flags,
 	extra_link_args = png_libs, 
-	define_macros = defines + [('USE_GMP',1)] + extra_macros,
-	undef_macros = [ 'NDEBUG']	
-	)
+	define_macros = defines + [ ('USE_GMP', 1) ] + extra_macros,
+	undef_macros = [ 'NDEBUG' ]
+)
 
 if 'win' == sys.platform[:3]:
 	warnings = '/W3'
@@ -254,7 +255,7 @@ module_fract4dc = Extension(
 	extra_link_args = png_libs,
 	define_macros = defines + extra_macros,
 	#undef_macros = [ 'NDEBUG'],
-	)
+)
 
 module_cmap = Extension(
 	'fract4d.fract4d_stdlib',
@@ -270,7 +271,7 @@ module_cmap = Extension(
 	libraries = libs,
 	library_dirs = extra_link,
 	define_macros = [ ('_REENTRANT', 1), ('STDLIB_EXPS', 1) ]
-	)
+)
 
 modules = [module_fract4dc, module_cmap]
 if have_gmp:
