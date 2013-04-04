@@ -86,3 +86,4 @@ fract4d/optimize.py
 fract4d/fractparser.py
 fract4dgui/gtkfractal.py
 fract4d/options.py
+fract4dgui/test_settings.py

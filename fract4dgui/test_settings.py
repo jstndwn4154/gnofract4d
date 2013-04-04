@@ -9,9 +9,8 @@ import os
 import sys
 
 import gtk
-import gettext
-os.environ.setdefault('LANG', 'en')
-gettext.install('gnofract4d')
+import i18n
+i18n.i18n()
 
 sys.path.insert(1, "..")
 

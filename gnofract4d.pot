@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-03 21:14+0200\n"
+"POT-Creation-Date: 2013-04-04 00:58+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1066,7 +1066,8 @@ msgstr ""
 msgid "Browse available fractal functions"
 msgstr ""
 
-#: fract4dgui/settings.py:610
+#: fract4dgui/settings.py:610 fract4dgui/test_settings.py:90
+#: fract4dgui/test_settings.py:104
 msgid "Formula"
 msgstr ""
 
@@ -1471,4 +1472,36 @@ msgstr ""
 
 #: fract4dgui/gtkfractal.py:878
 msgid "Error compiling fractal:"
+msgstr ""
+
+#: fract4dgui/test_settings.py:83 fract4dgui/test_settings.py:105
+msgid "Location"
+msgstr ""
+
+#: fract4dgui/test_settings.py:83
+msgid "Size :"
+msgstr ""
+
+#: fract4dgui/test_settings.py:90
+msgid "Bailout"
+msgstr ""
+
+#: fract4dgui/test_settings.py:104
+msgid "Outer"
+msgstr ""
+
+#: fract4dgui/test_settings.py:104
+msgid "Inner"
+msgstr ""
+
+#: fract4dgui/test_settings.py:105
+msgid "Transforms"
+msgstr ""
+
+#: fract4dgui/test_settings.py:105
+msgid "General"
+msgstr ""
+
+#: fract4dgui/test_settings.py:106
+msgid "Colors"
 msgstr ""
