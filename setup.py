@@ -219,7 +219,8 @@ if 'win' == sys.platform[:3]:
 	extra_include = [ 'P:/x86/GnuWin32/include' ]
 	includes = os.environ['GTK+_Include'].split(";")
 	extra_include += [i for i in includes]
-	extra_source = [ 'fract4d/c/win32func.cpp', 'fract4d/c/fract4d_stdlib_exports.cpp' ]
+	extra_source = [ 'fract4d/c/win32func.cpp' ]
+	extra_lib_source = [ 'fract4d/c/fract4d_stdlib_exports.cpp' ]
 	if "64 bit" in sys.version:
 		extra_link = [ 'P:/x86_64/GTK+/lib', 'P:/x86_64/GnuWin64/lib' ]
 	else:
@@ -231,6 +232,7 @@ else:
 	osdep = []
 	include_dir = []
 	extra_source = []
+	extra_lib_source = []
 	extra_link = []
 	extra_include = []
 	icon = ('share/pixmaps', ['pixmaps/gnofract4d-logo.png'])
@@ -260,14 +262,14 @@ module_cmap = Extension(
 	'fract4d/c/cmap.cpp',
 	'fract4d/c/image.cpp',
 	'fract4d/c/fract_stdlib.cpp'
-	] + extra_source,
+	] + extra_source + extra_lib_source,
 	include_dirs = [
 	'fract4d/c'
 	] + extra_include,
 	extra_compile_args = osdep,
 	libraries = libs,
 	library_dirs = extra_link,
-	define_macros = [ ('_REENTRANT', 1)]
+	define_macros = [ ('_REENTRANT', 1), ('STDLIB_EXPS', 1) ]
 	)
 
 modules = [module_fract4dc, module_cmap]
